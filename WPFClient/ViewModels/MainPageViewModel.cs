@@ -115,7 +115,7 @@ namespace WPFClient.ViewModels
                     () =>
                     {
                         if(string.IsNullOrWhiteSpace(TextField)) return;
-                        Messages.Add(new Message() {Content = TextField,Sender = LocalClient});
+                        Messages.Add(new Message() {Content = TextField,Sender = LocalClient,Time = DateTime.Now.ToLongTimeString()});
                         TextField = string.Empty;
                     }));
             }

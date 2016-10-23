@@ -38,6 +38,7 @@ namespace ServiceAssembly
 
         public Client(string name, string bgcolor)
         {
+            Time = DateTime.Now;
             Name = name;
             Pic = new Picture(bgcolor, Char.ToUpper(name[0]));
         }

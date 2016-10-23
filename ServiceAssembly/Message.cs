@@ -11,16 +11,18 @@ namespace ServiceAssembly
         [DataMember]
         public string Content { get; set; }
         [DataMember]
-        public string Time =>DateTime.Now.ToLongTimeString();
+        public string Time { get; set; }
 
         public Message()
         {
+            Time = DateTime.Now.ToLongTimeString();
         }
 
-        public Message(Client sender, string content)
+        public Message(Client sender, string content,string time)
         {
             Sender = sender;
             Content = content;
+            Time = time;
         }
     }
 }

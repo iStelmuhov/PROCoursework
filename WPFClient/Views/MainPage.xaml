@@ -14,14 +14,30 @@
     xmlns:viewModels="clr-namespace:WPFClient.ViewModels"
     Height="500"
     Width="800"
+    DataContext="{Binding
+        MainPage,
+        Source={StaticResource Locator}}"
     mc:Ignorable="d">
-    <Page.DataContext>
-        <viewModels:MainPageViewModel />
-    </Page.DataContext>
+
     <Page.Resources>
         <conventer:MouseButtonEventArgsToPointConverter x:Key="MouseButtonEventArgsToPointConverter" />
     </Page.Resources>
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand
+                Command="{Binding
+                    Mode=OneWay,
+                    Path=LoadComplete}"
+                PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <command:EventToCommand
+                Command="{Binding
+                    Mode=OneWay,
+                    Path=ExitChat}"
+                PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -127,7 +143,10 @@
                         HorizontalContentAlignment="Stretch"
                         Background="{DynamicResource AccentColorBrush2}"
                         BorderThickness="0"
-                        ItemsSource="{Binding Messages}">
+                        ItemsSource="{Binding
+                            Messages,
+                            UpdateSourceTrigger=PropertyChanged,
+                            Mode=TwoWay}">
                         <i:Interaction.Behaviors>
                             <behavior:ScrollOnNewItem />
                         </i:Interaction.Behaviors>
@@ -236,9 +255,32 @@
                 Background="{DynamicResource AccentColorBrush}"
                 Foreground="{DynamicResource MaterialDesignDarkForeground}"
                 Header="Users"
-                IsOpen="{Binding FlyIsOutOpen}"
+                IsOpen="{Binding FlyOutIsOpen}"
                 Position="Right">
-                <ListView />
+                <ListView
+                    Background="{DynamicResource AccentColorBrush}"
+                    ItemsSource="{Binding
+                        Clients,
+                        Mode=OneWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card
+                                Margin="1"
+                                HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Height="24"
+                                        Width="24"
+                                        Margin="3"
+                                        Background="{Binding Pic.Color}"
+                                        Content="{Binding Pic.Letter}"
+                                        Style="{DynamicResource MaterialDesignFloatingActionDarkButton}" />
+                                    <Label Content="{Binding Name}" />
+                                </StackPanel>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </controls:Flyout>
         </controls:FlyoutsControl>
     </Grid>

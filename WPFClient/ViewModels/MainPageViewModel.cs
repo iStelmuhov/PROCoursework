@@ -2,8 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Remoting.Channels;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using WPFClient.Models;
@@ -13,14 +16,8 @@ namespace WPFClient.ViewModels
 {
     public class MainPageViewModel:ViewModelBase,IChatCallback
     {
-        private SVC.Client LocalClient;
-        
-        public MainPageViewModel()
-        {
-            LocalClient = ViewModelLocator.NavigationService.Parameter as SVC.Client;
-            ViewModelLocator.MainPage = this;
-        }
-
+        public SVC.Client LocalClient;
+        private delegate void FaultedInvoker();
         private ObservableCollection<SVC.Message> _messagesCollection = new ObservableCollection<SVC.Message>();
         public ObservableCollection<SVC.Message> Messages
         {
@@ -41,6 +38,42 @@ namespace WPFClient.ViewModels
             }
         }
 
+        private RelayCommand _loadCompleteCommand;
+        public RelayCommand LoadComplete
+        {
+            get
+            {
+                return _loadCompleteCommand
+                    ?? (_loadCompleteCommand = new RelayCommand(
+                    () =>
+                    {
+                        ViewModelLocator.Proxy.InnerDuplexChannel.Faulted += InnerDuplexChannel_Faulted;
+                        ViewModelLocator.Proxy.InnerDuplexChannel.Closed += InnerDuplexChannel_Closed;
+                    }));
+            }
+        }
+
+        private void InnerDuplexChannel_Closed(object sender, EventArgs e)
+        {
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                new FaultedInvoker(HandleProxy));
+                return;
+            }
+            HandleProxy();
+        }
+
+        private void InnerDuplexChannel_Faulted(object sender, EventArgs e)
+        {
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                new FaultedInvoker(HandleProxy));
+                return;
+            }
+            HandleProxy();
+        }
 
         private string _textField = string.Empty;
         public string TextField
@@ -114,9 +147,22 @@ namespace WPFClient.ViewModels
                     ?? (_sendMessageCommand = new RelayCommand(
                     () =>
                     {
-                        if(string.IsNullOrWhiteSpace(TextField)) return;
-                        Messages.Add(new Message() {Content = TextField,Sender = LocalClient,Time = DateTime.Now.ToLongTimeString()});
-                        TextField = string.Empty;
+                        if (string.IsNullOrWhiteSpace(TextField) || ViewModelLocator.Proxy == null) return;
+
+                        if (ViewModelLocator.Proxy.State == CommunicationState.Faulted)
+                            HandleProxy();
+                        else
+                        {
+                            
+                            SVC.Message msg = new SVC.Message()
+                            {
+                                Content = TextField,
+                                Sender = LocalClient,
+                                Time = DateTime.Now.ToLongTimeString()
+                            };
+                            ViewModelLocator.Proxy.SayAsync(msg);
+                            TextField = string.Empty;
+                        }
                     }));
             }
         }
@@ -178,7 +224,7 @@ namespace WPFClient.ViewModels
 
 
         private bool _flyOutOpen = false;
-        public bool FlyIsOutOpen
+        public bool FlyOutIsOpen
         {
             get
             {
@@ -193,7 +239,7 @@ namespace WPFClient.ViewModels
                 }
 
                 _flyOutOpen = value;
-                RaisePropertyChanged(nameof(FlyIsOutOpen));
+                RaisePropertyChanged(nameof(FlyOutIsOpen));
             }
         }
 
@@ -207,7 +253,7 @@ namespace WPFClient.ViewModels
                     ?? (_openFlyOutCommand = new RelayCommand(
                     () =>
                     {
-                        FlyIsOutOpen = true;
+                        FlyOutIsOpen = true;
                     }));
             }
         }
@@ -221,14 +267,26 @@ namespace WPFClient.ViewModels
                     ?? (_exitChatCommand = new RelayCommand(
                     () =>
                     {
-                        ViewModelLocator.NavigationService.NavigateTo("LoginPage");
+                        Messages.Clear();
+                        Clients.Clear();
+                        TextField = string.Empty;
+                        LinesCollection.Clear();
+                        if (ViewModelLocator.Proxy != null)
+                        {
+                            if (ViewModelLocator.Proxy.State == CommunicationState.Faulted)
+                            {
+                                HandleProxy();
+                            }
+                            else
+                            {
+                                ViewModelLocator.Proxy.DisconnectAsync(LocalClient);
+                            }
+                        }
                     }));
             }
         }
 
         #region IChatCallbackRegion
-
-
         private ObservableCollection<Client> _clients = new ObservableCollection<Client>();
         public ObservableCollection<Client> Clients
         {
@@ -249,6 +307,28 @@ namespace WPFClient.ViewModels
             }
         }
 
+        private void HandleProxy()
+        {
+            if (ViewModelLocator.Proxy != null)
+            {
+                switch (ViewModelLocator.Proxy.State)
+                {
+                    case CommunicationState.Closed:
+                        ViewModelLocator.Proxy = null;
+                        ViewModelLocator.NavigationService.NavigateTo("LoginPage");
+                        break;
+                    case CommunicationState.Faulted:
+                        ViewModelLocator.Proxy.Abort();
+                        ViewModelLocator.Proxy = null;
+                        ViewModelLocator.NavigationService.NavigateTo("LoginPage");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        }
+
         public void RefreshClients(List<Client> clients)
         {
             Clients=new ObservableCollection<Client>(clients);
@@ -256,6 +336,7 @@ namespace WPFClient.ViewModels
 
         public void Receive(Message msg)
         {
+            
             Messages.Add(msg);
         }
 
@@ -277,13 +358,13 @@ namespace WPFClient.ViewModels
 
         public void UserJoin(Client client)
         {
-            Messages.Add(new SVC.Message() );
+            Messages.Add(new SVC.Message() {Content = "User joined",Sender = client,Time=DateTime.Now.ToLongTimeString()} );
         }
 
 
         public void UserLeave(Client client)
         {
-            throw new NotImplementedException();
+            Messages.Add(new SVC.Message() { Content = "User lived", Sender = client, Time = DateTime.Now.ToLongTimeString() });
         }
 
         #endregion

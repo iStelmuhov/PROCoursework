@@ -126,15 +126,11 @@ namespace WPFClient.ViewModels
         }
 
 
-        private string _newServerIp = string.Empty;
         public string NewSelectedServerIp
         {
             set
             {
-                if (SelectedIp != null)
-                {
-                    return;
-                }
+                
                 if (!string.IsNullOrEmpty(value))
                 {
                     _serversIPsCollection.Add(value);
@@ -183,9 +179,10 @@ namespace WPFClient.ViewModels
                            _proxy = null;
                       try
                       {
-                          
 
-                          InstanceContext context = new InstanceContext(ServiceLocator.Current.GetInstance<MainPageViewModel>());
+                           var mainPageModel = ServiceLocator.Current.GetInstance<MainPageViewModel>();
+                           mainPageModel.LocalClient = _localClient;
+                           InstanceContext context = new InstanceContext(mainPageModel);
                           _proxy = new SVC.ChatClient(context);
 
                           string servicePath = _proxy.Endpoint.ListenUri.AbsolutePath;
@@ -197,6 +194,7 @@ namespace WPFClient.ViewModels
 
                           _proxy.ConnectAsync(LocalClient);
                           _proxy.ConnectCompleted += _proxy_ConnectCompleted;
+                          ViewModelLocator.Proxy = _proxy;
                       }
                       catch (Exception ex)
                       {

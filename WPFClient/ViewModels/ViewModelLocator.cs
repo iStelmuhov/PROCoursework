@@ -30,7 +30,6 @@ namespace WPFClient.ViewModels
         public static FrameNavigationService NavigationService;
         public static SVC.ChatClient Proxy;
         public static SVC.Client LocalClient;
-        public static MainPageViewModel MainPage;
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
@@ -62,6 +61,17 @@ namespace WPFClient.ViewModels
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public MainPageViewModel MainPage
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MainPageViewModel>();
             }
         }
     }

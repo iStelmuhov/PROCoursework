@@ -13,7 +13,7 @@ namespace ServiceAssembly
     public class GameRoomService : IGame
     {
 
-        private static List<string> _log = new List<string>();
+        private static readonly List<string> _log = new List<string>();
 
         Dictionary<Client, IGameCallback> _clients =
              new Dictionary<Client, IGameCallback>();

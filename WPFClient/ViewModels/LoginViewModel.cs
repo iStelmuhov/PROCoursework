@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Practices.ServiceLocation;
 using WPFClient.Models;
 using WPFClient.SVC;
-using WPFClient.Views;
+using Application = System.Windows.Application;
 
 namespace WPFClient.ViewModels
 {
@@ -22,7 +21,30 @@ namespace WPFClient.ViewModels
 
         public LoginViewModel()
         {
-            _localClient=new SVC.Client() {Name = string.Empty,Pic = new Picture() { Color = PictureUI.GetRandomColor(),Letter = ' '}};
+            _localClient=new SVC.Client() {Name = string.Empty,Pic = new Picture() { Color = PictureUI.GetRandomColor(),Letter = ' '}};           
+        }
+
+        public delegate Task TaskInvoker();
+
+        private RelayCommand _loadCompletedCommand;
+        public RelayCommand LoadedCommand
+        {
+            get
+            {
+                return _loadCompletedCommand
+                    ?? (_loadCompletedCommand = new RelayCommand(
+                    () =>
+                    {
+                        ThreadPool.QueueUserWorkItem((o) =>
+                        {
+                            Thread.Sleep(500);
+                            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                new TaskInvoker(HideVisibleDialogs));
+
+                        });
+                        
+                    }));
+            }
         }
 
         private SVC.GameClient _proxy = ViewModelLocator.Proxy;
@@ -201,7 +223,24 @@ namespace WPFClient.ViewModels
             await DialogCoordinator.Instance.ShowMessageAsync(this, "Exception", msg, MessageDialogStyle.Affirmative, materialSettings);
         }
 
+        public static Task HideVisibleDialogs()
+        {
+            return Task.Run(async () =>
+            {
+                
+                await Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    var parent = Application.Current.MainWindow as MetroWindow;
+                    BaseMetroDialog dialogBeingShow = await parent.GetCurrentDialogAsync<BaseMetroDialog>();
 
+                    while (dialogBeingShow != null)
+                    {
+                        await parent.HideMetroDialogAsync(dialogBeingShow);
+                        dialogBeingShow = await parent.GetCurrentDialogAsync<BaseMetroDialog>();
+                    }
+                });
+            });
+        }
         private void HandleProxy()
         {
             switch (_proxy.State)

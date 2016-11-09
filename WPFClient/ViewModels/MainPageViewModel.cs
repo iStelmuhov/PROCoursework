@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Dynamic;
 using System.ServiceModel;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using MaterialDesignThemes.Wpf;
-using Microsoft.Practices.ServiceLocation;
 using WPFClient.Models;
 using WPFClient.SVC;
 using WPFClient.Views;
@@ -274,10 +268,6 @@ namespace WPFClient.ViewModels
 
         private void Current_Exit(object sender, ExitEventArgs e)
         {
-            Messages.Clear();
-            Clients.Clear();
-            TextField = string.Empty;
-            LinesCollection.Clear();
             if (ViewModelLocator.Proxy != null)
             {
                 if (ViewModelLocator.Proxy.State == CommunicationState.Faulted)
@@ -324,11 +314,8 @@ namespace WPFClient.ViewModels
                 return _exitChatCommand
                     ?? (_exitChatCommand = new RelayCommand(
                     () =>
-                    {
-                        Messages.Clear();
-                        Clients.Clear();
-                        TextField = string.Empty;
-                        LinesCollection.Clear();
+                    {     
+                                         
                         if (ViewModelLocator.Proxy != null)
                         {
                             if (ViewModelLocator.Proxy.State == CommunicationState.Faulted)
@@ -337,6 +324,7 @@ namespace WPFClient.ViewModels
                             }
                             else
                             {
+                                ShowProgressIndicator();
                                 ViewModelLocator.Proxy.DisconnectAsync(LocalClient);
                             }
                         }
@@ -370,7 +358,6 @@ namespace WPFClient.ViewModels
                 await parent.Dispatcher.Invoke(async () =>
                 {
                     BaseMetroDialog dialogBeingShow = await parent.GetCurrentDialogAsync<BaseMetroDialog>();
-
                     while (dialogBeingShow != null)
                     {
                         await parent.HideMetroDialogAsync(dialogBeingShow);
@@ -410,7 +397,12 @@ namespace WPFClient.ViewModels
                 {
                     case CommunicationState.Closed:
                         ViewModelLocator.Proxy = null;
+                        Messages.Clear();
+                        Clients.Clear();
+                        TextField = string.Empty;
+                        LinesCollection.Clear();
                         await HideVisibleDialogs(Application.Current.MainWindow as MetroWindow);
+                        
                         ViewModelLocator.NavigationService.NavigateTo("LoginPage");
                         break;
                     case CommunicationState.Faulted:
@@ -543,9 +535,10 @@ namespace WPFClient.ViewModels
                   materialSettings);
         }
 
-        public IAsyncResult BeginWordChoose(AsyncCallback callback, object asyncState)
+        private void ShowProgressIndicator()
         {
-            throw new NotImplementedException();
+            var circularProgressBarDialog = new CustomDialog() {Content = new CircularProgressBar()};
+            DialogCoordinator.Instance.ShowMetroDialogAsync(this, circularProgressBarDialog);           
         }
 
         public void PerfomStartGame()
@@ -585,6 +578,10 @@ namespace WPFClient.ViewModels
         #region NotImplemented
 
 
+        public IAsyncResult BeginWordChoose(AsyncCallback callback, object asyncState)
+        {
+            throw new NotImplementedException();
+        }
 
         public IAsyncResult BeginRefreshClients(List<Client> clients, AsyncCallback callback, object asyncState)
         {

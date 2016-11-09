@@ -9,6 +9,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:validation="clr-namespace:WPFClient.Validation"
     xmlns:viewModels="clr-namespace:WPFClient.ViewModels"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
     Height="330"
     Width="300"
     dialogs:DialogParticipation.Register="{Binding}"
@@ -16,7 +18,15 @@
     <Page.DataContext>
         <viewModels:LoginViewModel />
     </Page.DataContext>
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand
+                Command="{Binding
+                    Mode=OneWay,
+                    Path=LoadedCommand}"
+                PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <materialDesign:DialogHost>
         <Grid x:Name="Root">
             <Grid.RowDefinitions>

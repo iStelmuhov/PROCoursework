@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using WPFRoomHost.Models;
@@ -54,7 +55,7 @@ namespace WPFRoomHost.ViewModels
             }
         }
 
-        private string  _listenIp;
+        private string  _listenIp="localhost";
         public string ListenIp
         {
             get
@@ -74,7 +75,7 @@ namespace WPFRoomHost.ViewModels
             }
         }
 
-        private string _port;
+        private string _port="7997";
         public string Port
         {
             get
@@ -171,7 +172,7 @@ namespace WPFRoomHost.ViewModels
 
                         NormalMessage($"TCP:{tcpAdrs}\nHTTP:{httpAdrs}");
 
-                        _host=new ServiceHost(typeof(ServiceAssembly.ChatRoomService),baseAdrs);
+                        _host=new ServiceHost(typeof(ServiceAssembly.GameRoomService),baseAdrs);
 
                         NetTcpBinding tcpBinding = new NetTcpBinding(SecurityMode.None, true)
                         {
@@ -205,7 +206,7 @@ namespace WPFRoomHost.ViewModels
                         tcpBinding.ReliableSession.InactivityTimeout =
                                                    new TimeSpan(20, 0, 10);
 
-                        _host.AddServiceEndpoint(typeof(ServiceAssembly.IChat),
+                        _host.AddServiceEndpoint(typeof(ServiceAssembly.IGame),
                             tcpBinding, "tcp");
 
                         ServiceMetadataBehavior mBehave =

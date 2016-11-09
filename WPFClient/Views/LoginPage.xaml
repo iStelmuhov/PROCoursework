@@ -16,10 +16,8 @@
     <Page.DataContext>
         <viewModels:LoginViewModel />
     </Page.DataContext>
-    <materialDesign:DialogHost
-        DialogContent="{Binding DialogHostContent}"
-        Identifier="RootDialog"
-        IsOpen="{Binding IsHostDialogOpen}">
+
+    <materialDesign:DialogHost>
         <Grid x:Name="Root">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*" />

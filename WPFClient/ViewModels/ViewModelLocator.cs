@@ -28,7 +28,7 @@ namespace WPFClient.ViewModels
     {
 
         public static FrameNavigationService NavigationService;
-        public static SVC.ChatClient Proxy;
+        public static SVC.GameClient Proxy;
         public static SVC.Client LocalClient;
         static ViewModelLocator()
         {

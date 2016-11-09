@@ -24,5 +24,12 @@ namespace ServiceAssembly
             Content = content;
             Time = time;
         }
+
+        public Message(Client sender, string content)
+        {
+            Sender = sender;
+            Content = content;
+            Time = DateTime.Now.ToLongDateString();
+        }
     }
 }

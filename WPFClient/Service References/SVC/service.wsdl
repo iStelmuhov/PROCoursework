@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GameRoomService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IGame_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
+          <wsrm:InactivityTimeout Milliseconds="72010000">
+          </wsrm:InactivityTimeout>
+          <wsrm:AcknowledgementInterval Milliseconds="200">
+          </wsrm:AcknowledgementInterval>
+        </wsrm:RMAssertion>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
+        </msb:BinaryEncoding>
+        <wsaw:UsingAddressing>
+        </wsaw:UsingAddressing>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/ServiceAssembly" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IGame_Connect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Connect" />
+  </wsdl:message>
+  <wsdl:message name="IGame_Connect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGame_Say_InputMessage">
+    <wsdl:part name="parameters" element="tns:Say" />
+  </wsdl:message>
+  <wsdl:message name="IGame_SendLine_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendLine" />
+  </wsdl:message>
+  <wsdl:message name="IGame_IsWriting_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsWriting" />
+  </wsdl:message>
+  <wsdl:message name="IGame_Disconnect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Disconnect" />
+  </wsdl:message>
+  <wsdl:message name="IGame_StartNewGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartNewGame" />
+  </wsdl:message>
+  <wsdl:message name="IGame_EndGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndGame" />
+  </wsdl:message>
+  <wsdl:message name="IGame_SendLetter_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendLetter" />
+  </wsdl:message>
+  <wsdl:message name="IGame_SendWordInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendWordInfo" />
+  </wsdl:message>
+  <wsdl:message name="IGame_ReciveGameWord_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReciveGameWord" />
+  </wsdl:message>
+  <wsdl:message name="IGame_DrawerResponce_InputMessage">
+    <wsdl:part name="parameters" element="tns:DrawerResponce" />
+  </wsdl:message>
+  <wsdl:message name="IGame_RefreshClients_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RefreshClients" />
+  </wsdl:message>
+  <wsdl:message name="IGame_Receive_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:Receive" />
+  </wsdl:message>
+  <wsdl:message name="IGame_ReceiveLine_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveLine" />
+  </wsdl:message>
+  <wsdl:message name="IGame_RefreshLines_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RefreshLines" />
+  </wsdl:message>
+  <wsdl:message name="IGame_IsWritingCallback_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:IsWritingCallback" />
+  </wsdl:message>
+  <wsdl:message name="IGame_UserJoin_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UserJoin" />
+  </wsdl:message>
+  <wsdl:message name="IGame_UserLeave_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UserLeave" />
+  </wsdl:message>
+  <wsdl:message name="IGame_ReciveLetter_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReciveLetter" />
+  </wsdl:message>
+  <wsdl:message name="IGame_ReciveWordInfo_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReciveWordInfo" />
+  </wsdl:message>
+  <wsdl:message name="IGame_DrawerRequest_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:DrawerRequest" />
+  </wsdl:message>
+  <wsdl:message name="IGame_WordChoose_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:WordChoose" />
+  </wsdl:message>
+  <wsdl:message name="IGame_PerfomStartGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PerfomStartGame" />
+  </wsdl:message>
+  <wsdl:message name="IGame_PerfomEndGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PerfomEndGame" />
+  </wsdl:message>
+  <wsdl:message name="IGame_LiveResponce_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:LiveResponce" />
+  </wsdl:message>
+  <wsdl:message name="IGame_LiveResponce_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:LiveResponceResponse" />
+  </wsdl:message>
+  <wsdl:portType msc:usingSession="true" name="IGame">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Connect">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/Connect" message="tns:IGame_Connect_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/ConnectResponse" message="tns:IGame_Connect_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Say">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/Say" message="tns:IGame_Say_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SendLine">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/SendLine" message="tns:IGame_SendLine_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="IsWriting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/IsWriting" message="tns:IGame_IsWriting_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="true" name="Disconnect">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/Disconnect" message="tns:IGame_Disconnect_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="StartNewGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/StartNewGame" message="tns:IGame_StartNewGame_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="EndGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/EndGame" message="tns:IGame_EndGame_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SendLetter">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/SendLetter" message="tns:IGame_SendLetter_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SendWordInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/SendWordInfo" message="tns:IGame_SendWordInfo_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReciveGameWord">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/ReciveGameWord" message="tns:IGame_ReciveGameWord_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="DrawerResponce">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/DrawerResponce" message="tns:IGame_DrawerResponce_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="RefreshClients">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/RefreshClients" message="tns:IGame_RefreshClients_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Receive">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/Receive" message="tns:IGame_Receive_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveLine">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/ReceiveLine" message="tns:IGame_ReceiveLine_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="RefreshLines">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/RefreshLines" message="tns:IGame_RefreshLines_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="IsWritingCallback">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/IsWritingCallback" message="tns:IGame_IsWritingCallback_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UserJoin">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/UserJoin" message="tns:IGame_UserJoin_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UserLeave">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/UserLeave" message="tns:IGame_UserLeave_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReciveLetter">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/ReciveLetter" message="tns:IGame_ReciveLetter_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReciveWordInfo">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/ReciveWordInfo" message="tns:IGame_ReciveWordInfo_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="DrawerRequest">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/DrawerRequest" message="tns:IGame_DrawerRequest_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="WordChoose">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/WordChoose" message="tns:IGame_WordChoose_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="PerfomStartGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/PerfomStartGame" message="tns:IGame_PerfomStartGame_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="PerfomEndGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/PerfomEndGame" message="tns:IGame_PerfomEndGame_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="LiveResponce">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGame/LiveResponce" message="tns:IGame_LiveResponce_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/LiveResponceResponse" message="tns:IGame_LiveResponce_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IGame" type="tns:IGame">
+    <wsp:PolicyReference URI="#NetTcpBinding_IGame_policy">
+    </wsp:PolicyReference>
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="Connect">
+      <soap12:operation soapAction="http://tempuri.org/IGame/Connect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Say">
+      <soap12:operation soapAction="http://tempuri.org/IGame/Say" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SendLine">
+      <soap12:operation soapAction="http://tempuri.org/IGame/SendLine" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="IsWriting">
+      <soap12:operation soapAction="http://tempuri.org/IGame/IsWriting" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="Disconnect">
+      <soap12:operation soapAction="http://tempuri.org/IGame/Disconnect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="StartNewGame">
+      <soap12:operation soapAction="http://tempuri.org/IGame/StartNewGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <soap12:operation soapAction="http://tempuri.org/IGame/EndGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SendLetter">
+      <soap12:operation soapAction="http://tempuri.org/IGame/SendLetter" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SendWordInfo">
+      <soap12:operation soapAction="http://tempuri.org/IGame/SendWordInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ReciveGameWord">
+      <soap12:operation soapAction="http://tempuri.org/IGame/ReciveGameWord" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DrawerResponce">
+      <soap12:operation soapAction="http://tempuri.org/IGame/DrawerResponce" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="RefreshClients">
+      <soap12:operation soapAction="http://tempuri.org/IGame/RefreshClients" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Receive">
+      <soap12:operation soapAction="http://tempuri.org/IGame/Receive" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveLine">
+      <soap12:operation soapAction="http://tempuri.org/IGame/ReceiveLine" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefreshLines">
+      <soap12:operation soapAction="http://tempuri.org/IGame/RefreshLines" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsWritingCallback">
+      <soap12:operation soapAction="http://tempuri.org/IGame/IsWritingCallback" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserJoin">
+      <soap12:operation soapAction="http://tempuri.org/IGame/UserJoin" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserLeave">
+      <soap12:operation soapAction="http://tempuri.org/IGame/UserLeave" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReciveLetter">
+      <soap12:operation soapAction="http://tempuri.org/IGame/ReciveLetter" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReciveWordInfo">
+      <soap12:operation soapAction="http://tempuri.org/IGame/ReciveWordInfo" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DrawerRequest">
+      <soap12:operation soapAction="http://tempuri.org/IGame/DrawerRequest" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WordChoose">
+      <soap12:operation soapAction="http://tempuri.org/IGame/WordChoose" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PerfomStartGame">
+      <soap12:operation soapAction="http://tempuri.org/IGame/PerfomStartGame" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PerfomEndGame">
+      <soap12:operation soapAction="http://tempuri.org/IGame/PerfomEndGame" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LiveResponce">
+      <soap12:operation soapAction="http://tempuri.org/IGame/LiveResponce" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GameRoomService">
+    <wsdl:port name="NetTcpBinding_IGame" binding="tns:NetTcpBinding_IGame">
+      <soap12:address location="net.tcp://localhost:7997/Host/tcp" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:7997/Host/tcp</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

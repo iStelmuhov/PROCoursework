@@ -69,8 +69,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -93,6 +95,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\SelectDialog.xaml.cs">
+      <DependentUpon>SelectDialog.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,9 +114,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behavior\LineSettingClone.cs" />
     <Compile Include="Conventer\MouseButtonEventArgsToPointConverter .cs" />
-    <Compile Include="Models\LineSettings.cs" />
-    <Compile Include="Models\LineUI.cs" />
     <Compile Include="Models\MouseArgs.cs" />
     <Compile Include="Behavior\ScrollOnNewItem.cs" />
     <Compile Include="Models\PictureUI.cs" />
@@ -138,6 +142,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\SelectDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -163,14 +171,17 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Service References\SVC\service1.wsdl" />
-    <None Include="Service References\SVC\service2.xsd">
+    <None Include="Service References\SVC\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\SVC\service21.xsd">
+    <None Include="Service References\SVC\service.wsdl" />
+    <None Include="Service References\SVC\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\SVC\ServiceAssembly1.xsd">
+    <None Include="Service References\SVC\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SVC\ServiceAssembly.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

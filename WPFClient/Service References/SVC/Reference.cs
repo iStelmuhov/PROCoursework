@@ -29,6 +29,9 @@ namespace WPFClient.SVC {
         private WPFClient.SVC.Picture PicField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime TimeField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -63,6 +66,19 @@ namespace WPFClient.SVC {
                 if ((object.ReferenceEquals(this.PicField, value) != true)) {
                     this.PicField = value;
                     this.RaisePropertyChanged("Pic");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Score {
+            get {
+                return this.ScoreField;
+            }
+            set {
+                if ((this.ScoreField.Equals(value) != true)) {
+                    this.ScoreField = value;
+                    this.RaisePropertyChanged("Score");
                 }
             }
         }
@@ -230,24 +246,30 @@ namespace WPFClient.SVC {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FileMessage", Namespace="http://schemas.datacontract.org/2004/07/ServiceAssembly")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Line", Namespace="http://schemas.datacontract.org/2004/07/ServiceAssembly")]
     [System.SerializableAttribute()]
-    public partial class FileMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Line : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private byte[] DataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FileNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private WPFClient.SVC.Client SenderField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime TimeField;
+        private WPFClient.SVC.LineSettings SettingsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double X1Field;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double X2Field;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double Y1Field;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double Y2Field;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -256,32 +278,6 @@ namespace WPFClient.SVC {
             }
             set {
                 this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public byte[] Data {
-            get {
-                return this.DataField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DataField, value) != true)) {
-                    this.DataField = value;
-                    this.RaisePropertyChanged("Data");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FileName {
-            get {
-                return this.FileNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
-                    this.FileNameField = value;
-                    this.RaisePropertyChanged("FileName");
-                }
             }
         }
         
@@ -299,14 +295,127 @@ namespace WPFClient.SVC {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime Time {
+        public WPFClient.SVC.LineSettings Settings {
             get {
-                return this.TimeField;
+                return this.SettingsField;
             }
             set {
-                if ((this.TimeField.Equals(value) != true)) {
-                    this.TimeField = value;
-                    this.RaisePropertyChanged("Time");
+                if ((object.ReferenceEquals(this.SettingsField, value) != true)) {
+                    this.SettingsField = value;
+                    this.RaisePropertyChanged("Settings");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double X1 {
+            get {
+                return this.X1Field;
+            }
+            set {
+                if ((this.X1Field.Equals(value) != true)) {
+                    this.X1Field = value;
+                    this.RaisePropertyChanged("X1");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double X2 {
+            get {
+                return this.X2Field;
+            }
+            set {
+                if ((this.X2Field.Equals(value) != true)) {
+                    this.X2Field = value;
+                    this.RaisePropertyChanged("X2");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double Y1 {
+            get {
+                return this.Y1Field;
+            }
+            set {
+                if ((this.Y1Field.Equals(value) != true)) {
+                    this.Y1Field = value;
+                    this.RaisePropertyChanged("Y1");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double Y2 {
+            get {
+                return this.Y2Field;
+            }
+            set {
+                if ((this.Y2Field.Equals(value) != true)) {
+                    this.Y2Field = value;
+                    this.RaisePropertyChanged("Y2");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LineSettings", Namespace="http://schemas.datacontract.org/2004/07/ServiceAssembly")]
+    [System.SerializableAttribute()]
+    public partial class LineSettings : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ColorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ThicknessField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Color {
+            get {
+                return this.ColorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ColorField, value) != true)) {
+                    this.ColorField = value;
+                    this.RaisePropertyChanged("Color");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Thickness {
+            get {
+                return this.ThicknessField;
+            }
+            set {
+                if ((this.ThicknessField.Equals(value) != true)) {
+                    this.ThicknessField = value;
+                    this.RaisePropertyChanged("Thickness");
                 }
             }
         }
@@ -322,120 +431,216 @@ namespace WPFClient.SVC {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="SVC.IChat", CallbackContract=typeof(WPFClient.SVC.IChatCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
-    public interface IChat {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="SVC.IGame", CallbackContract=typeof(WPFClient.SVC.IGameCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
+    public interface IGame {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/Connect", ReplyAction="http://tempuri.org/IChat/ConnectResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGame/Connect", ReplyAction="http://tempuri.org/IGame/ConnectResponse")]
         bool Connect(WPFClient.SVC.Client client);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IChat/Connect", ReplyAction="http://tempuri.org/IChat/ConnectResponse")]
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IGame/Connect", ReplyAction="http://tempuri.org/IGame/ConnectResponse")]
         System.IAsyncResult BeginConnect(WPFClient.SVC.Client client, System.AsyncCallback callback, object asyncState);
         
         bool EndConnect(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Say")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/Say")]
         void Say(WPFClient.SVC.Message msg);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/Say")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/Say")]
         System.IAsyncResult BeginSay(WPFClient.SVC.Message msg, System.AsyncCallback callback, object asyncState);
         
         void EndSay(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Whisper")]
-        void Whisper(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/SendLine")]
+        void SendLine(WPFClient.SVC.Line line);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/Whisper")]
-        System.IAsyncResult BeginWhisper(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/SendLine")]
+        System.IAsyncResult BeginSendLine(WPFClient.SVC.Line line, System.AsyncCallback callback, object asyncState);
         
-        void EndWhisper(System.IAsyncResult result);
+        void EndSendLine(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/IsWriting")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/IsWriting")]
         void IsWriting(WPFClient.SVC.Client client);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/IsWriting")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/IsWriting")]
         System.IAsyncResult BeginIsWriting(WPFClient.SVC.Client client, System.AsyncCallback callback, object asyncState);
         
         void EndIsWriting(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChat/SendFile", ReplyAction="http://tempuri.org/IChat/SendFileResponse")]
-        bool SendFile(WPFClient.SVC.FileMessage fileMsg, WPFClient.SVC.Client receiver);
-        
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IChat/SendFile", ReplyAction="http://tempuri.org/IChat/SendFileResponse")]
-        System.IAsyncResult BeginSendFile(WPFClient.SVC.FileMessage fileMsg, WPFClient.SVC.Client receiver, System.AsyncCallback callback, object asyncState);
-        
-        bool EndSendFile(System.IAsyncResult result);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://tempuri.org/IChat/Disconnect")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, Action="http://tempuri.org/IGame/Disconnect")]
         void Disconnect(WPFClient.SVC.Client client);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, AsyncPattern=true, Action="http://tempuri.org/IChat/Disconnect")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, AsyncPattern=true, Action="http://tempuri.org/IGame/Disconnect")]
         System.IAsyncResult BeginDisconnect(WPFClient.SVC.Client client, System.AsyncCallback callback, object asyncState);
         
         void EndDisconnect(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/StartNewGame")]
+        void StartNewGame();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/StartNewGame")]
+        System.IAsyncResult BeginStartNewGame(System.AsyncCallback callback, object asyncState);
+        
+        void EndStartNewGame(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/EndGame")]
+        void EndGame();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/EndGame")]
+        System.IAsyncResult BeginEndGame(System.AsyncCallback callback, object asyncState);
+        
+        void EndEndGame(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/SendLetter")]
+        void SendLetter(char letter, int position);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/SendLetter")]
+        System.IAsyncResult BeginSendLetter(char letter, int position, System.AsyncCallback callback, object asyncState);
+        
+        void EndSendLetter(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/SendWordInfo")]
+        void SendWordInfo(int len);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/SendWordInfo")]
+        System.IAsyncResult BeginSendWordInfo(int len, System.AsyncCallback callback, object asyncState);
+        
+        void EndSendWordInfo(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/ReciveGameWord")]
+        void ReciveGameWord(string word, WPFClient.SVC.Client sender);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/ReciveGameWord")]
+        System.IAsyncResult BeginReciveGameWord(string word, WPFClient.SVC.Client sender, System.AsyncCallback callback, object asyncState);
+        
+        void EndReciveGameWord(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/DrawerResponce")]
+        void DrawerResponce(WPFClient.SVC.Client sender, bool answer);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/DrawerResponce")]
+        System.IAsyncResult BeginDrawerResponce(WPFClient.SVC.Client sender, bool answer, System.AsyncCallback callback, object asyncState);
+        
+        void EndDrawerResponce(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatCallback {
+    public interface IGameCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/RefreshClients")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/RefreshClients")]
         void RefreshClients(System.Collections.Generic.List<WPFClient.SVC.Client> clients);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/RefreshClients")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/RefreshClients")]
         System.IAsyncResult BeginRefreshClients(System.Collections.Generic.List<WPFClient.SVC.Client> clients, System.AsyncCallback callback, object asyncState);
         
         void EndRefreshClients(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/Receive")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/Receive")]
         void Receive(WPFClient.SVC.Message msg);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/Receive")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/Receive")]
         System.IAsyncResult BeginReceive(WPFClient.SVC.Message msg, System.AsyncCallback callback, object asyncState);
         
         void EndReceive(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/ReceiveWhisper")]
-        void ReceiveWhisper(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/ReceiveLine")]
+        void ReceiveLine(WPFClient.SVC.Line line);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/ReceiveWhisper")]
-        System.IAsyncResult BeginReceiveWhisper(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/ReceiveLine")]
+        System.IAsyncResult BeginReceiveLine(WPFClient.SVC.Line line, System.AsyncCallback callback, object asyncState);
         
-        void EndReceiveWhisper(System.IAsyncResult result);
+        void EndReceiveLine(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/IsWritingCallback")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/RefreshLines")]
+        void RefreshLines(System.Collections.Generic.List<WPFClient.SVC.Line> line);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/RefreshLines")]
+        System.IAsyncResult BeginRefreshLines(System.Collections.Generic.List<WPFClient.SVC.Line> line, System.AsyncCallback callback, object asyncState);
+        
+        void EndRefreshLines(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/IsWritingCallback")]
         void IsWritingCallback(WPFClient.SVC.Client client);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/IsWritingCallback")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/IsWritingCallback")]
         System.IAsyncResult BeginIsWritingCallback(WPFClient.SVC.Client client, System.AsyncCallback callback, object asyncState);
         
         void EndIsWritingCallback(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/ReceiverFile")]
-        void ReceiverFile(WPFClient.SVC.FileMessage msg, WPFClient.SVC.Client receiver);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/ReceiverFile")]
-        System.IAsyncResult BeginReceiverFile(WPFClient.SVC.FileMessage msg, WPFClient.SVC.Client receiver, System.AsyncCallback callback, object asyncState);
-        
-        void EndReceiverFile(System.IAsyncResult result);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/UserJoin")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/UserJoin")]
         void UserJoin(WPFClient.SVC.Client client);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/UserJoin")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/UserJoin")]
         System.IAsyncResult BeginUserJoin(WPFClient.SVC.Client client, System.AsyncCallback callback, object asyncState);
         
         void EndUserJoin(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChat/UserLeave")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/UserLeave")]
         void UserLeave(WPFClient.SVC.Client client);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IChat/UserLeave")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/UserLeave")]
         System.IAsyncResult BeginUserLeave(WPFClient.SVC.Client client, System.AsyncCallback callback, object asyncState);
         
         void EndUserLeave(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/ReciveLetter")]
+        void ReciveLetter(char letter, int position);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/ReciveLetter")]
+        System.IAsyncResult BeginReciveLetter(char letter, int position, System.AsyncCallback callback, object asyncState);
+        
+        void EndReciveLetter(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/ReciveWordInfo")]
+        void ReciveWordInfo(int len);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/ReciveWordInfo")]
+        System.IAsyncResult BeginReciveWordInfo(int len, System.AsyncCallback callback, object asyncState);
+        
+        void EndReciveWordInfo(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/DrawerRequest")]
+        void DrawerRequest();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/DrawerRequest")]
+        System.IAsyncResult BeginDrawerRequest(System.AsyncCallback callback, object asyncState);
+        
+        void EndDrawerRequest(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/WordChoose")]
+        void WordChoose(System.Collections.Generic.List<string> words);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/WordChoose")]
+        System.IAsyncResult BeginWordChoose(System.Collections.Generic.List<string> words, System.AsyncCallback callback, object asyncState);
+        
+        void EndWordChoose(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/PerfomStartGame")]
+        void PerfomStartGame();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/PerfomStartGame")]
+        System.IAsyncResult BeginPerfomStartGame(System.AsyncCallback callback, object asyncState);
+        
+        void EndPerfomStartGame(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/PerfomEndGame")]
+        void PerfomEndGame();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/PerfomEndGame")]
+        System.IAsyncResult BeginPerfomEndGame(System.AsyncCallback callback, object asyncState);
+        
+        void EndPerfomEndGame(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGame/LiveResponce", ReplyAction="http://tempuri.org/IGame/LiveResponceResponse")]
+        bool LiveResponce();
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IGame/LiveResponce", ReplyAction="http://tempuri.org/IGame/LiveResponceResponse")]
+        System.IAsyncResult BeginLiveResponce(System.AsyncCallback callback, object asyncState);
+        
+        bool EndLiveResponce(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatChannel : WPFClient.SVC.IChat, System.ServiceModel.IClientChannel {
+    public interface IGameChannel : WPFClient.SVC.IGame, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -459,26 +664,7 @@ namespace WPFClient.SVC {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class SendFileCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public SendFileCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public bool Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((bool)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ChatClient : System.ServiceModel.DuplexClientBase<WPFClient.SVC.IChat>, WPFClient.SVC.IChat {
+    public partial class GameClient : System.ServiceModel.DuplexClientBase<WPFClient.SVC.IGame>, WPFClient.SVC.IGame {
         
         private BeginOperationDelegate onBeginConnectDelegate;
         
@@ -492,11 +678,11 @@ namespace WPFClient.SVC {
         
         private System.Threading.SendOrPostCallback onSayCompletedDelegate;
         
-        private BeginOperationDelegate onBeginWhisperDelegate;
+        private BeginOperationDelegate onBeginSendLineDelegate;
         
-        private EndOperationDelegate onEndWhisperDelegate;
+        private EndOperationDelegate onEndSendLineDelegate;
         
-        private System.Threading.SendOrPostCallback onWhisperCompletedDelegate;
+        private System.Threading.SendOrPostCallback onSendLineCompletedDelegate;
         
         private BeginOperationDelegate onBeginIsWritingDelegate;
         
@@ -504,35 +690,65 @@ namespace WPFClient.SVC {
         
         private System.Threading.SendOrPostCallback onIsWritingCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSendFileDelegate;
-        
-        private EndOperationDelegate onEndSendFileDelegate;
-        
-        private System.Threading.SendOrPostCallback onSendFileCompletedDelegate;
-        
         private BeginOperationDelegate onBeginDisconnectDelegate;
         
         private EndOperationDelegate onEndDisconnectDelegate;
         
         private System.Threading.SendOrPostCallback onDisconnectCompletedDelegate;
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        private BeginOperationDelegate onBeginStartNewGameDelegate;
+        
+        private EndOperationDelegate onEndStartNewGameDelegate;
+        
+        private System.Threading.SendOrPostCallback onStartNewGameCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginEndGameDelegate;
+        
+        private EndOperationDelegate onEndEndGameDelegate;
+        
+        private System.Threading.SendOrPostCallback onEndGameCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginSendLetterDelegate;
+        
+        private EndOperationDelegate onEndSendLetterDelegate;
+        
+        private System.Threading.SendOrPostCallback onSendLetterCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginSendWordInfoDelegate;
+        
+        private EndOperationDelegate onEndSendWordInfoDelegate;
+        
+        private System.Threading.SendOrPostCallback onSendWordInfoCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginReciveGameWordDelegate;
+        
+        private EndOperationDelegate onEndReciveGameWordDelegate;
+        
+        private System.Threading.SendOrPostCallback onReciveGameWordCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginDrawerResponceDelegate;
+        
+        private EndOperationDelegate onEndDrawerResponceDelegate;
+        
+        private System.Threading.SendOrPostCallback onDrawerResponceCompletedDelegate;
+        
+        public GameClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public GameClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public GameClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public GameClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public GameClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
         
@@ -540,13 +756,23 @@ namespace WPFClient.SVC {
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SayCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> WhisperCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SendLineCompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> IsWritingCompleted;
         
-        public event System.EventHandler<SendFileCompletedEventArgs> SendFileCompleted;
-        
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> DisconnectCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> StartNewGameCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> EndGameCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SendLetterCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SendWordInfoCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> ReciveGameWordCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> DrawerResponceCompleted;
         
         public bool Connect(WPFClient.SVC.Client client) {
             return base.Channel.Connect(client);
@@ -647,55 +873,53 @@ namespace WPFClient.SVC {
                         msg}, this.onEndSayDelegate, this.onSayCompletedDelegate, userState);
         }
         
-        public void Whisper(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver) {
-            base.Channel.Whisper(msg, receiver);
+        public void SendLine(WPFClient.SVC.Line line) {
+            base.Channel.SendLine(line);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginWhisper(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginWhisper(msg, receiver, callback, asyncState);
+        public System.IAsyncResult BeginSendLine(WPFClient.SVC.Line line, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginSendLine(line, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public void EndWhisper(System.IAsyncResult result) {
-            base.Channel.EndWhisper(result);
+        public void EndSendLine(System.IAsyncResult result) {
+            base.Channel.EndSendLine(result);
         }
         
-        private System.IAsyncResult OnBeginWhisper(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            WPFClient.SVC.Message msg = ((WPFClient.SVC.Message)(inValues[0]));
-            WPFClient.SVC.Client receiver = ((WPFClient.SVC.Client)(inValues[1]));
-            return this.BeginWhisper(msg, receiver, callback, asyncState);
+        private System.IAsyncResult OnBeginSendLine(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            WPFClient.SVC.Line line = ((WPFClient.SVC.Line)(inValues[0]));
+            return this.BeginSendLine(line, callback, asyncState);
         }
         
-        private object[] OnEndWhisper(System.IAsyncResult result) {
-            this.EndWhisper(result);
+        private object[] OnEndSendLine(System.IAsyncResult result) {
+            this.EndSendLine(result);
             return null;
         }
         
-        private void OnWhisperCompleted(object state) {
-            if ((this.WhisperCompleted != null)) {
+        private void OnSendLineCompleted(object state) {
+            if ((this.SendLineCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.WhisperCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.SendLineCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void WhisperAsync(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver) {
-            this.WhisperAsync(msg, receiver, null);
+        public void SendLineAsync(WPFClient.SVC.Line line) {
+            this.SendLineAsync(line, null);
         }
         
-        public void WhisperAsync(WPFClient.SVC.Message msg, WPFClient.SVC.Client receiver, object userState) {
-            if ((this.onBeginWhisperDelegate == null)) {
-                this.onBeginWhisperDelegate = new BeginOperationDelegate(this.OnBeginWhisper);
+        public void SendLineAsync(WPFClient.SVC.Line line, object userState) {
+            if ((this.onBeginSendLineDelegate == null)) {
+                this.onBeginSendLineDelegate = new BeginOperationDelegate(this.OnBeginSendLine);
             }
-            if ((this.onEndWhisperDelegate == null)) {
-                this.onEndWhisperDelegate = new EndOperationDelegate(this.OnEndWhisper);
+            if ((this.onEndSendLineDelegate == null)) {
+                this.onEndSendLineDelegate = new EndOperationDelegate(this.OnEndSendLine);
             }
-            if ((this.onWhisperCompletedDelegate == null)) {
-                this.onWhisperCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnWhisperCompleted);
+            if ((this.onSendLineCompletedDelegate == null)) {
+                this.onSendLineCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSendLineCompleted);
             }
-            base.InvokeAsync(this.onBeginWhisperDelegate, new object[] {
-                        msg,
-                        receiver}, this.onEndWhisperDelegate, this.onWhisperCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginSendLineDelegate, new object[] {
+                        line}, this.onEndSendLineDelegate, this.onSendLineCompletedDelegate, userState);
         }
         
         public void IsWriting(WPFClient.SVC.Client client) {
@@ -747,58 +971,6 @@ namespace WPFClient.SVC {
                         client}, this.onEndIsWritingDelegate, this.onIsWritingCompletedDelegate, userState);
         }
         
-        public bool SendFile(WPFClient.SVC.FileMessage fileMsg, WPFClient.SVC.Client receiver) {
-            return base.Channel.SendFile(fileMsg, receiver);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginSendFile(WPFClient.SVC.FileMessage fileMsg, WPFClient.SVC.Client receiver, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSendFile(fileMsg, receiver, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public bool EndSendFile(System.IAsyncResult result) {
-            return base.Channel.EndSendFile(result);
-        }
-        
-        private System.IAsyncResult OnBeginSendFile(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            WPFClient.SVC.FileMessage fileMsg = ((WPFClient.SVC.FileMessage)(inValues[0]));
-            WPFClient.SVC.Client receiver = ((WPFClient.SVC.Client)(inValues[1]));
-            return this.BeginSendFile(fileMsg, receiver, callback, asyncState);
-        }
-        
-        private object[] OnEndSendFile(System.IAsyncResult result) {
-            bool retVal = this.EndSendFile(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnSendFileCompleted(object state) {
-            if ((this.SendFileCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SendFileCompleted(this, new SendFileCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void SendFileAsync(WPFClient.SVC.FileMessage fileMsg, WPFClient.SVC.Client receiver) {
-            this.SendFileAsync(fileMsg, receiver, null);
-        }
-        
-        public void SendFileAsync(WPFClient.SVC.FileMessage fileMsg, WPFClient.SVC.Client receiver, object userState) {
-            if ((this.onBeginSendFileDelegate == null)) {
-                this.onBeginSendFileDelegate = new BeginOperationDelegate(this.OnBeginSendFile);
-            }
-            if ((this.onEndSendFileDelegate == null)) {
-                this.onEndSendFileDelegate = new EndOperationDelegate(this.OnEndSendFile);
-            }
-            if ((this.onSendFileCompletedDelegate == null)) {
-                this.onSendFileCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSendFileCompleted);
-            }
-            base.InvokeAsync(this.onBeginSendFileDelegate, new object[] {
-                        fileMsg,
-                        receiver}, this.onEndSendFileDelegate, this.onSendFileCompletedDelegate, userState);
-        }
-        
         public void Disconnect(WPFClient.SVC.Client client) {
             base.Channel.Disconnect(client);
         }
@@ -846,6 +1018,302 @@ namespace WPFClient.SVC {
             }
             base.InvokeAsync(this.onBeginDisconnectDelegate, new object[] {
                         client}, this.onEndDisconnectDelegate, this.onDisconnectCompletedDelegate, userState);
+        }
+        
+        public void StartNewGame() {
+            base.Channel.StartNewGame();
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginStartNewGame(System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginStartNewGame(callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndStartNewGame(System.IAsyncResult result) {
+            base.Channel.EndStartNewGame(result);
+        }
+        
+        private System.IAsyncResult OnBeginStartNewGame(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            return this.BeginStartNewGame(callback, asyncState);
+        }
+        
+        private object[] OnEndStartNewGame(System.IAsyncResult result) {
+            this.EndStartNewGame(result);
+            return null;
+        }
+        
+        private void OnStartNewGameCompleted(object state) {
+            if ((this.StartNewGameCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.StartNewGameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void StartNewGameAsync() {
+            this.StartNewGameAsync(null);
+        }
+        
+        public void StartNewGameAsync(object userState) {
+            if ((this.onBeginStartNewGameDelegate == null)) {
+                this.onBeginStartNewGameDelegate = new BeginOperationDelegate(this.OnBeginStartNewGame);
+            }
+            if ((this.onEndStartNewGameDelegate == null)) {
+                this.onEndStartNewGameDelegate = new EndOperationDelegate(this.OnEndStartNewGame);
+            }
+            if ((this.onStartNewGameCompletedDelegate == null)) {
+                this.onStartNewGameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnStartNewGameCompleted);
+            }
+            base.InvokeAsync(this.onBeginStartNewGameDelegate, null, this.onEndStartNewGameDelegate, this.onStartNewGameCompletedDelegate, userState);
+        }
+        
+        public void EndGame() {
+            base.Channel.EndGame();
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginEndGame(System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginEndGame(callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndEndGame(System.IAsyncResult result) {
+            base.Channel.EndEndGame(result);
+        }
+        
+        private System.IAsyncResult OnBeginEndGame(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            return this.BeginEndGame(callback, asyncState);
+        }
+        
+        private object[] OnEndEndGame(System.IAsyncResult result) {
+            this.EndEndGame(result);
+            return null;
+        }
+        
+        private void OnEndGameCompleted(object state) {
+            if ((this.EndGameCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.EndGameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void EndGameAsync() {
+            this.EndGameAsync(null);
+        }
+        
+        public void EndGameAsync(object userState) {
+            if ((this.onBeginEndGameDelegate == null)) {
+                this.onBeginEndGameDelegate = new BeginOperationDelegate(this.OnBeginEndGame);
+            }
+            if ((this.onEndEndGameDelegate == null)) {
+                this.onEndEndGameDelegate = new EndOperationDelegate(this.OnEndEndGame);
+            }
+            if ((this.onEndGameCompletedDelegate == null)) {
+                this.onEndGameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnEndGameCompleted);
+            }
+            base.InvokeAsync(this.onBeginEndGameDelegate, null, this.onEndEndGameDelegate, this.onEndGameCompletedDelegate, userState);
+        }
+        
+        public void SendLetter(char letter, int position) {
+            base.Channel.SendLetter(letter, position);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginSendLetter(char letter, int position, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginSendLetter(letter, position, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndSendLetter(System.IAsyncResult result) {
+            base.Channel.EndSendLetter(result);
+        }
+        
+        private System.IAsyncResult OnBeginSendLetter(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            char letter = ((char)(inValues[0]));
+            int position = ((int)(inValues[1]));
+            return this.BeginSendLetter(letter, position, callback, asyncState);
+        }
+        
+        private object[] OnEndSendLetter(System.IAsyncResult result) {
+            this.EndSendLetter(result);
+            return null;
+        }
+        
+        private void OnSendLetterCompleted(object state) {
+            if ((this.SendLetterCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.SendLetterCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void SendLetterAsync(char letter, int position) {
+            this.SendLetterAsync(letter, position, null);
+        }
+        
+        public void SendLetterAsync(char letter, int position, object userState) {
+            if ((this.onBeginSendLetterDelegate == null)) {
+                this.onBeginSendLetterDelegate = new BeginOperationDelegate(this.OnBeginSendLetter);
+            }
+            if ((this.onEndSendLetterDelegate == null)) {
+                this.onEndSendLetterDelegate = new EndOperationDelegate(this.OnEndSendLetter);
+            }
+            if ((this.onSendLetterCompletedDelegate == null)) {
+                this.onSendLetterCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSendLetterCompleted);
+            }
+            base.InvokeAsync(this.onBeginSendLetterDelegate, new object[] {
+                        letter,
+                        position}, this.onEndSendLetterDelegate, this.onSendLetterCompletedDelegate, userState);
+        }
+        
+        public void SendWordInfo(int len) {
+            base.Channel.SendWordInfo(len);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginSendWordInfo(int len, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginSendWordInfo(len, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndSendWordInfo(System.IAsyncResult result) {
+            base.Channel.EndSendWordInfo(result);
+        }
+        
+        private System.IAsyncResult OnBeginSendWordInfo(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int len = ((int)(inValues[0]));
+            return this.BeginSendWordInfo(len, callback, asyncState);
+        }
+        
+        private object[] OnEndSendWordInfo(System.IAsyncResult result) {
+            this.EndSendWordInfo(result);
+            return null;
+        }
+        
+        private void OnSendWordInfoCompleted(object state) {
+            if ((this.SendWordInfoCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.SendWordInfoCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void SendWordInfoAsync(int len) {
+            this.SendWordInfoAsync(len, null);
+        }
+        
+        public void SendWordInfoAsync(int len, object userState) {
+            if ((this.onBeginSendWordInfoDelegate == null)) {
+                this.onBeginSendWordInfoDelegate = new BeginOperationDelegate(this.OnBeginSendWordInfo);
+            }
+            if ((this.onEndSendWordInfoDelegate == null)) {
+                this.onEndSendWordInfoDelegate = new EndOperationDelegate(this.OnEndSendWordInfo);
+            }
+            if ((this.onSendWordInfoCompletedDelegate == null)) {
+                this.onSendWordInfoCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSendWordInfoCompleted);
+            }
+            base.InvokeAsync(this.onBeginSendWordInfoDelegate, new object[] {
+                        len}, this.onEndSendWordInfoDelegate, this.onSendWordInfoCompletedDelegate, userState);
+        }
+        
+        public void ReciveGameWord(string word, WPFClient.SVC.Client sender) {
+            base.Channel.ReciveGameWord(word, sender);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginReciveGameWord(string word, WPFClient.SVC.Client sender, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginReciveGameWord(word, sender, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndReciveGameWord(System.IAsyncResult result) {
+            base.Channel.EndReciveGameWord(result);
+        }
+        
+        private System.IAsyncResult OnBeginReciveGameWord(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string word = ((string)(inValues[0]));
+            WPFClient.SVC.Client sender = ((WPFClient.SVC.Client)(inValues[1]));
+            return this.BeginReciveGameWord(word, sender, callback, asyncState);
+        }
+        
+        private object[] OnEndReciveGameWord(System.IAsyncResult result) {
+            this.EndReciveGameWord(result);
+            return null;
+        }
+        
+        private void OnReciveGameWordCompleted(object state) {
+            if ((this.ReciveGameWordCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.ReciveGameWordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void ReciveGameWordAsync(string word, WPFClient.SVC.Client sender) {
+            this.ReciveGameWordAsync(word, sender, null);
+        }
+        
+        public void ReciveGameWordAsync(string word, WPFClient.SVC.Client sender, object userState) {
+            if ((this.onBeginReciveGameWordDelegate == null)) {
+                this.onBeginReciveGameWordDelegate = new BeginOperationDelegate(this.OnBeginReciveGameWord);
+            }
+            if ((this.onEndReciveGameWordDelegate == null)) {
+                this.onEndReciveGameWordDelegate = new EndOperationDelegate(this.OnEndReciveGameWord);
+            }
+            if ((this.onReciveGameWordCompletedDelegate == null)) {
+                this.onReciveGameWordCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnReciveGameWordCompleted);
+            }
+            base.InvokeAsync(this.onBeginReciveGameWordDelegate, new object[] {
+                        word,
+                        sender}, this.onEndReciveGameWordDelegate, this.onReciveGameWordCompletedDelegate, userState);
+        }
+        
+        public void DrawerResponce(WPFClient.SVC.Client sender, bool answer) {
+            base.Channel.DrawerResponce(sender, answer);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginDrawerResponce(WPFClient.SVC.Client sender, bool answer, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginDrawerResponce(sender, answer, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndDrawerResponce(System.IAsyncResult result) {
+            base.Channel.EndDrawerResponce(result);
+        }
+        
+        private System.IAsyncResult OnBeginDrawerResponce(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            WPFClient.SVC.Client sender = ((WPFClient.SVC.Client)(inValues[0]));
+            bool answer = ((bool)(inValues[1]));
+            return this.BeginDrawerResponce(sender, answer, callback, asyncState);
+        }
+        
+        private object[] OnEndDrawerResponce(System.IAsyncResult result) {
+            this.EndDrawerResponce(result);
+            return null;
+        }
+        
+        private void OnDrawerResponceCompleted(object state) {
+            if ((this.DrawerResponceCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.DrawerResponceCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void DrawerResponceAsync(WPFClient.SVC.Client sender, bool answer) {
+            this.DrawerResponceAsync(sender, answer, null);
+        }
+        
+        public void DrawerResponceAsync(WPFClient.SVC.Client sender, bool answer, object userState) {
+            if ((this.onBeginDrawerResponceDelegate == null)) {
+                this.onBeginDrawerResponceDelegate = new BeginOperationDelegate(this.OnBeginDrawerResponce);
+            }
+            if ((this.onEndDrawerResponceDelegate == null)) {
+                this.onEndDrawerResponceDelegate = new EndOperationDelegate(this.OnEndDrawerResponce);
+            }
+            if ((this.onDrawerResponceCompletedDelegate == null)) {
+                this.onDrawerResponceCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnDrawerResponceCompleted);
+            }
+            base.InvokeAsync(this.onBeginDrawerResponceDelegate, new object[] {
+                        sender,
+                        answer}, this.onEndDrawerResponceDelegate, this.onDrawerResponceCompletedDelegate, userState);
         }
     }
 }

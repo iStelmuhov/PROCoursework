@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -9,6 +13,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Practices.ServiceLocation;
 using WPFClient.Models;
 using WPFClient.SVC;
+using WPFClient.Views;
 
 namespace WPFClient.ViewModels
 {
@@ -20,7 +25,7 @@ namespace WPFClient.ViewModels
             _localClient=new SVC.Client() {Name = string.Empty,Pic = new Picture() { Color = PictureUI.GetRandomColor(),Letter = ' '}};
         }
 
-        private SVC.ChatClient _proxy = ViewModelLocator.Proxy;
+        private SVC.GameClient _proxy = ViewModelLocator.Proxy;
 
         private SVC.Client _localClient;
         public SVC.Client LocalClient
@@ -41,49 +46,6 @@ namespace WPFClient.ViewModels
                 RaisePropertyChanged(nameof(LocalClient));
             }
         }
-
-
-        private bool _osHostDialogOpen;
-        public bool IsHostDialogOpen
-        {
-            get
-            {
-                return _osHostDialogOpen;
-            }
-
-            set
-            {
-                if (_osHostDialogOpen == value)
-                {
-                    return;
-                }
-
-                _osHostDialogOpen = value;
-                RaisePropertyChanged(nameof(IsHostDialogOpen));
-            }
-        }
-
-
-        private object _dialogHostContent;
-        public object DialogHostContent
-        {
-            get
-            {
-                return _dialogHostContent;
-            }
-
-            set
-            {
-                if (_dialogHostContent == value)
-                {
-                    return;
-                }
-
-                _dialogHostContent = value;
-                RaisePropertyChanged(nameof(DialogHostContent));
-            }
-        }
-
 
         private ObservableCollection<string> _serversIPsCollection = new ObservableCollection<string>() { "localhost" };
         public ObservableCollection<string> ServersIpCollection
@@ -124,7 +86,6 @@ namespace WPFClient.ViewModels
                 RaisePropertyChanged(nameof(SelectedIp));
             }
         }
-
 
         public string NewSelectedServerIp
         {
@@ -183,7 +144,7 @@ namespace WPFClient.ViewModels
                            var mainPageModel = ServiceLocator.Current.GetInstance<MainPageViewModel>();
                            mainPageModel.LocalClient = _localClient;
                            InstanceContext context = new InstanceContext(mainPageModel);
-                          _proxy = new SVC.ChatClient(context);
+                          _proxy = new SVC.GameClient(context);
 
                           string servicePath = _proxy.Endpoint.ListenUri.AbsolutePath;
                           string serviceListenPort = _proxy.Endpoint.Address.Uri.Port.ToString();
@@ -237,9 +198,7 @@ namespace WPFClient.ViewModels
                 AnimateShow = true,
                 ColorScheme = MetroDialogColorScheme.Accented
             };
-            IsHostDialogOpen = false;
             await DialogCoordinator.Instance.ShowMessageAsync(this, "Exception", msg, MessageDialogStyle.Affirmative, materialSettings);
-
         }
 
 

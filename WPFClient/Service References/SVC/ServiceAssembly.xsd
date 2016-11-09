@@ -5,6 +5,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Pic" nillable="true" type="tns:Picture" />
+      <xs:element minOccurs="0" name="Score" type="xs:int" />
       <xs:element minOccurs="0" name="Time" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
@@ -24,19 +25,34 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Message" nillable="true" type="tns:Message" />
-  <xs:complexType name="FileMessage">
+  <xs:complexType name="Line">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Data" nillable="true" type="xs:base64Binary" />
-      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Sender" nillable="true" type="tns:Client" />
-      <xs:element minOccurs="0" name="Time" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Settings" nillable="true" type="tns:LineSettings" />
+      <xs:element minOccurs="0" name="X1" type="xs:double" />
+      <xs:element minOccurs="0" name="X2" type="xs:double" />
+      <xs:element minOccurs="0" name="Y1" type="xs:double" />
+      <xs:element minOccurs="0" name="Y2" type="xs:double" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="FileMessage" nillable="true" type="tns:FileMessage" />
+  <xs:element name="Line" nillable="true" type="tns:Line" />
+  <xs:complexType name="LineSettings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Color" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Thickness" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LineSettings" nillable="true" type="tns:LineSettings" />
   <xs:complexType name="ArrayOfClient">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Client" nillable="true" type="tns:Client" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfClient" nillable="true" type="tns:ArrayOfClient" />
+  <xs:complexType name="ArrayOfLine">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Line" nillable="true" type="tns:Line" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLine" nillable="true" type="tns:ArrayOfLine" />
 </xs:schema>

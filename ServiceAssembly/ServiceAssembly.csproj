@@ -115,6 +115,10 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LingvoNET, Version=1.1.0.0, Culture=neutral, PublicKeyToken=7d49b21a20bef57b, processorArchitecture=MSIL">
+      <HintPath>..\packages\LingvoNET.1.1.0\lib\LingvoNET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -128,9 +132,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientTimeComparer.cs" />
+    <Compile Include="ClientAsyncCall.cs" />
     <Compile Include="CrocodileGame.cs" />
     <Compile Include="GameSettings.cs" />
+    <Compile Include="GetWords.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="LineSettings.cs" />
     <Compile Include="Picture.cs" />
@@ -140,6 +145,9 @@
     <Compile Include="IGameCallback.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

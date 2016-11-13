@@ -46,7 +46,7 @@ namespace ServiceAssembly
         [OperationContract(IsOneWay = true)]
         void PerfomEndGame();
 
-        [OperationContract(IsOneWay = false)]
-        bool LiveResponce();
+        [OperationContract(IsOneWay = true)]
+        void Ping();
     }
 }

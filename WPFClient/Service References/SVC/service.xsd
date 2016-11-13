@@ -172,16 +172,9 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="LiveResponce">
+  <xs:element name="Ping">
     <xs:complexType>
       <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="LiveResponceResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="LiveResponceResult" type="xs:boolean" />
-      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

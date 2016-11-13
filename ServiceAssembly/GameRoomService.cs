@@ -2,31 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Dispatcher;
+using System.Threading;
 using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace ServiceAssembly
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single,
-    IncludeExceptionDetailInFaults = true,
-    ConcurrencyMode = ConcurrencyMode.Multiple,
-    UseSynchronizationContext = false)]
+         IncludeExceptionDetailInFaults = true,
+         ConcurrencyMode = ConcurrencyMode.Multiple,
+         UseSynchronizationContext = false)]
     public class GameRoomService : IGame
     {
 
         private static readonly List<string> _log = new List<string>();
 
         Dictionary<Client, IGameCallback> _clients =
-             new Dictionary<Client, IGameCallback>();
-        
+            new Dictionary<Client, IGameCallback>();
+
         List<Client> ClientList => _clients.Keys.ToList();
 
         List<Line> _lines = new List<Line>();
 
         public readonly Client Admin = new Client("Admin", new Picture("red", 'A'));
+
         IGameCallback CurrentCallback => OperationContext.Current.
             GetCallbackChannel<IGameCallback>();
 
-        CrocodileGame Game;
+        private CrocodileGame Game { get; set; }
 
         private readonly Timer _answerTimer;
         private bool _canSend = true;
@@ -43,18 +48,7 @@ namespace ServiceAssembly
 
         private void _liveTestTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (var clientsValue in _clients.Values)
-            {
-                try
-                {
-                    if (!clientsValue.LiveResponce())
-                        Disconnect(_clients.FirstOrDefault(p => p.Value == clientsValue).Key);
-                }
-                catch (Exception)
-                {
-                    Disconnect(_clients.FirstOrDefault(p => p.Value == clientsValue).Key);
-                }
-            }
+            
         }
 
         private void _answerTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -70,15 +64,26 @@ namespace ServiceAssembly
             return _clients.Keys.FirstOrDefault(a => a.Name == name) != null;
         }
 
+        private Client SearchClietnsByName(string name)
+        {
+            return _clients.FirstOrDefault(p => p.Key.Name == name).Key;
+        }
+
+        private Client SearchClietnsByCallback(IGameCallback callback)
+        {
+            return _clients.FirstOrDefault(p => p.Value == callback).Key;
+        }
         public bool Connect(Client client)
         {
-            if (!_clients.ContainsValue(CurrentCallback) &&
-                !SearchClientsByName(client.Name))
-            {
-                lock (_syncObj)
+            Monitor.Enter(_syncObj);
+                if (!_clients.ContainsValue(CurrentCallback) &&
+                    !SearchClientsByName(client.Name))
                 {
-                    client.Time=DateTime.Now;
+
+                    client.Time = DateTime.Now;
                     _clients.Add(client, CurrentCallback);
+                    (CurrentCallback as ICommunicationObject).Faulted += GameRoomService_Faulted;
+                    (CurrentCallback as ICommunicationObject).Closed += GameRoomService_Faulted;
 
                     foreach (Client key in _clients.Keys)
                     {
@@ -88,66 +93,35 @@ namespace ServiceAssembly
                             callback.RefreshClients(ClientList);
                             callback.RefreshLines(_lines);
                             callback.UserJoin(client);
+
+                            if (Game.IsActive)
+                            {
+                                callback.PerfomStartGame();
+                                callback.ReciveWordInfo(Game.Settings.Word.Length);
+                                foreach (var letterPosition in Game.Settings.Shownletters)
+                                {
+                                    callback.ReciveLetter(Game.Settings.Word.ElementAt(letterPosition), letterPosition);
+                                }
+                            }
                         }
                         catch
                         {
-                            _clients.Remove(key);
+                            _clients.Remove(SearchClietnsByName(key.Name));
+                        Monitor.Exit(_syncObj);
                         }
-
                     }
-
                     if (ClientList.Count >= 2)
                         CheckAndStarNewGame(true);
+                    Monitor.Exit(_syncObj);
+                    return true;
                 }
-                return true;
-            }
+             Monitor.Exit(_syncObj);
             return false;
         }
-
-        public void Say(Message msg)
-        {
-            foreach (IGameCallback callback in _clients.Values)
-            {
-                callback.Receive(msg);
-            }
-
-
-            if (!Game.IsActive) return;
-            if (!Equals(msg.Sender, Game.Settings.DrawingClient) && Game.CheckWord(msg.Content))
-            {
-                Game.EndGame(msg.Sender);
-            }
-        }
-
-        public void SendLine(Line line)
-        {
-            if (Game.IsActive && !line.Sender.Equals(Game.Settings.DrawingClient))
-                return;
-
-            lock (_gameSync)
-            {
-                _lines.Add(line);
-                foreach (IGameCallback callback in _clients.Values)
-                {
-                    callback.ReceiveLine(line);
-                }
-            }
-        }
-
-        public void IsWriting(Client client)
-        {
-            lock (_syncObj)
-            {
-                foreach (IGameCallback callback in _clients.Values)
-                {
-                    callback.IsWritingCallback(client);
-                }
-            }
-
-        }
-
         public void Disconnect(Client client)
         {
+            if(client==null) return;
+
             foreach (Client c in _clients.Keys)
             {
                 if (client.Name == c.Name)
@@ -165,7 +139,7 @@ namespace ServiceAssembly
                             }
                             catch (Exception)
                             {
-                                _clients.Remove(_clients.FirstOrDefault(p=>p.Value==callback).Key);
+                                Disconnect(SearchClietnsByCallback(callback));
                             }
                         }
 
@@ -181,9 +155,55 @@ namespace ServiceAssembly
                     }
                     return;
                 }
-
-
             }
+        }
+
+        private void GameRoomService_Faulted(object sender, EventArgs e)
+        {
+            Disconnect(SearchClietnsByCallback(sender as IGameCallback));
+        }
+
+        public void Say(Message msg)
+        {
+            lock (_syncObj)
+            {
+                foreach (IGameCallback callback in _clients.Values)
+                {
+                    callback.Receive(msg);
+                }
+            }
+            if (!Game.IsActive) return;
+            if (!Equals(msg.Sender, Game.Settings.DrawingClient) && Game.CheckWord(msg.Content))
+            {
+                Game.EndGame(msg.Sender);
+            }
+        }
+
+        public void SendLine(Line line)
+        {
+            if (Game.IsActive && !line.Sender.Equals(Game.Settings.DrawingClient))
+                return;
+
+            lock (_gameSync)
+            {
+                _lines.Add(line);
+                foreach (IGameCallback callback in _clients.Values)
+                {
+                   callback.ReceiveLine(line);                
+                }
+            }
+        }
+
+        public void IsWriting(Client client)
+        {
+            lock (_syncObj)
+            {
+                foreach (IGameCallback callback in _clients.Values)
+                {
+                    callback.IsWritingCallback(client);
+                }
+            }
+
         }
 
         public void StartNewGame()
@@ -268,7 +288,7 @@ namespace ServiceAssembly
                     IGameCallback callback = _clients[rec];
                     try
                     {
-                        callback.WordChoose(items);
+                        callback.WordChoose(GetWords.FromTextFile("word_rus.txt",4,6));
                     }
                     catch (Exception ex)
                     {
@@ -313,5 +333,6 @@ namespace ServiceAssembly
                 }
             }
         }
+
     }
 }

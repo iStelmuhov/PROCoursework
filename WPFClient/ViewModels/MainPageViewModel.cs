@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -23,7 +24,7 @@ namespace WPFClient.ViewModels
     {
         public SVC.Client LocalClient;
         private delegate void FaultedInvoker();
-
+        public delegate Task TaskInvoker();
         #region Chat
         private ObservableCollection<SVC.Message> _messagesCollection = new ObservableCollection<SVC.Message>();
         public ObservableCollection<SVC.Message> Messages
@@ -262,6 +263,14 @@ namespace WPFClient.ViewModels
                         ViewModelLocator.Proxy.InnerDuplexChannel.Closed += InnerDuplexChannel_Closed;
 
                         Application.Current.Exit += Current_Exit;
+
+                        ThreadPool.QueueUserWorkItem((o) =>
+                        {
+                            Thread.Sleep(500);
+                            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                new TaskInvoker(HideVisibleDialogs));
+
+                        });
                     }));
             }
         }
@@ -367,6 +376,24 @@ namespace WPFClient.ViewModels
             });
         }
 
+        private static Task HideVisibleDialogs()
+        {
+            return Task.Run(async () =>
+            {
+
+                await Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    var parent = Application.Current.MainWindow as MetroWindow;
+                    BaseMetroDialog dialogBeingShow = await parent.GetCurrentDialogAsync<BaseMetroDialog>();
+
+                    while (dialogBeingShow != null)
+                    {
+                        await parent.HideMetroDialogAsync(dialogBeingShow);
+                        dialogBeingShow = await parent.GetCurrentDialogAsync<BaseMetroDialog>();
+                    }
+                });
+            });
+        }
         #region IChatCallbackRegion
 
         private ObservableCollection<Client> _clients = new ObservableCollection<Client>();
@@ -401,6 +428,7 @@ namespace WPFClient.ViewModels
                         Clients.Clear();
                         TextField = string.Empty;
                         LinesCollection.Clear();
+                        Letters.Clear();
                         await HideVisibleDialogs(Application.Current.MainWindow as MetroWindow);
                         
                         ViewModelLocator.NavigationService.NavigateTo("LoginPage");
@@ -441,8 +469,7 @@ namespace WPFClient.ViewModels
         }
 
         public void Receive(Message msg)
-        {
-            
+        {            
             Messages.Add(msg);
         }
 
@@ -500,8 +527,6 @@ namespace WPFClient.ViewModels
             
         }
 
-
-
         public void WordChoose(List<string> words )
         {
             var materialSettings = new MetroDialogSettings
@@ -549,13 +574,13 @@ namespace WPFClient.ViewModels
 
         public void PerfomEndGame()
         {
-            //throw new NotImplementedException();
+            Letters.Clear();
         }
 
 
-        public bool LiveResponce()
+        public void Ping()
         {
-            return true;
+           return;
         }
 
         #endregion
@@ -577,7 +602,15 @@ namespace WPFClient.ViewModels
 
         #region NotImplemented
 
+        public IAsyncResult BeginPing(AsyncCallback callback, object asyncState)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void EndPing(IAsyncResult result)
+        {
+            throw new NotImplementedException();
+        }
         public IAsyncResult BeginWordChoose(AsyncCallback callback, object asyncState)
         {
             throw new NotImplementedException();

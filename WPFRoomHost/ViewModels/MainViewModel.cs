@@ -146,6 +146,7 @@ namespace WPFRoomHost.ViewModels
                     ?? ( _startButtonCommand = new RelayCommand(
                     () =>
                     {
+
                         if (!new IpAdressValidationRule().Validate(ListenIp, CultureInfo.CurrentCulture).IsValid ||
                             !new PortValidationRule().Validate(Port, CultureInfo.CurrentCulture).IsValid)
                         {
@@ -203,6 +204,7 @@ namespace WPFRoomHost.ViewModels
 
                         tcpBinding.ReceiveTimeout = new TimeSpan(20, 0, 0);
                         tcpBinding.ReliableSession.Enabled = true;
+                        tcpBinding.ReliableSession.Ordered = false;
                         tcpBinding.ReliableSession.InactivityTimeout =
                                                    new TimeSpan(20, 0, 10);
 

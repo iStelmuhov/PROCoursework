@@ -630,13 +630,13 @@ namespace WPFClient.SVC {
         
         void EndPerfomEndGame(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGame/LiveResponce", ReplyAction="http://tempuri.org/IGame/LiveResponceResponse")]
-        bool LiveResponce();
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/Ping")]
+        void Ping();
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IGame/LiveResponce", ReplyAction="http://tempuri.org/IGame/LiveResponceResponse")]
-        System.IAsyncResult BeginLiveResponce(System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/Ping")]
+        System.IAsyncResult BeginPing(System.AsyncCallback callback, object asyncState);
         
-        bool EndLiveResponce(System.IAsyncResult result);
+        void EndPing(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

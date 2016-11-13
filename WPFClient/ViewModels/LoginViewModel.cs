@@ -12,6 +12,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Practices.ServiceLocation;
 using WPFClient.Models;
 using WPFClient.SVC;
+using WPFClient.Views;
 using Application = System.Windows.Application;
 
 namespace WPFClient.ViewModels
@@ -21,7 +22,7 @@ namespace WPFClient.ViewModels
 
         public LoginViewModel()
         {
-            _localClient=new SVC.Client() {Name = string.Empty,Pic = new Picture() { Color = PictureUI.GetRandomColor(),Letter = ' '}};           
+            _localClient = new SVC.Client() { Name = string.Empty, Pic = new Picture() { Color = PictureUI.GetRandomColor(), Letter = ' ' } };
         }
 
         public delegate Task TaskInvoker();
@@ -42,7 +43,7 @@ namespace WPFClient.ViewModels
                                 new TaskInvoker(HideVisibleDialogs));
 
                         });
-                        
+
                     }));
             }
         }
@@ -113,7 +114,7 @@ namespace WPFClient.ViewModels
         {
             set
             {
-                
+
                 if (!string.IsNullOrEmpty(value))
                 {
                     _serversIPsCollection.Add(value);
@@ -131,7 +132,7 @@ namespace WPFClient.ViewModels
                     ?? (_changecolorCommand = new RelayCommand(
                     () =>
                     {
-                            LocalClient.Pic.Color = PictureUI.GetRandomColor();
+                        LocalClient.Pic.Color = PictureUI.GetRandomColor();
                     }));
             }
         }
@@ -141,7 +142,7 @@ namespace WPFClient.ViewModels
             get { return LocalClient.Name; }
             set
             {
-                if(LocalClient.Name==value)
+                if (LocalClient.Name == value)
                     return;
 
                 LocalClient.Name = value;
@@ -157,47 +158,46 @@ namespace WPFClient.ViewModels
             get
             {
                 return _loginCommand
-                    ?? (_loginCommand = new RelayCommand(() =>
+                    ?? (_loginCommand = new RelayCommand(async () =>
                        {
                            _proxy = null;
-                      try
-                      {
+                           try
+                           {
+                               await ShowProgressIndicator();
+                               var mainPageModel = ServiceLocator.Current.GetInstance<MainPageViewModel>();
+                               mainPageModel.LocalClient = _localClient;
+                               InstanceContext context = new InstanceContext(mainPageModel);
+                               _proxy = new SVC.GameClient(context);
 
-                           var mainPageModel = ServiceLocator.Current.GetInstance<MainPageViewModel>();
-                           mainPageModel.LocalClient = _localClient;
-                           InstanceContext context = new InstanceContext(mainPageModel);
-                          _proxy = new SVC.GameClient(context);
+                               string servicePath = _proxy.Endpoint.ListenUri.AbsolutePath;
+                               string serviceListenPort = _proxy.Endpoint.Address.Uri.Port.ToString();
 
-                          string servicePath = _proxy.Endpoint.ListenUri.AbsolutePath;
-                          string serviceListenPort = _proxy.Endpoint.Address.Uri.Port.ToString();
+                               _proxy.Endpoint.Address = new EndpointAddress($"net.tcp://{SelectedIp}:{serviceListenPort}{servicePath}");
 
-                          _proxy.Endpoint.Address = new EndpointAddress($"net.tcp://{SelectedIp}:{serviceListenPort}{servicePath}");
+                               _proxy.Open();
 
-                          _proxy.Open();
-
-                          _proxy.ConnectAsync(LocalClient);
-                          _proxy.ConnectCompleted += _proxy_ConnectCompleted;
-                          ViewModelLocator.Proxy = _proxy;
-                      }
-                      catch (Exception ex)
-                      {
-                          Message(ex.Message);
-                      }
-
-
-                  }));
+                               _proxy.ConnectAsync(LocalClient);
+                               _proxy.ConnectCompleted += _proxy_ConnectCompleted;
+                               ViewModelLocator.Proxy = _proxy;
+                           }
+                           catch (Exception ex)
+                           {
+                               await HideVisibleDialogs();
+                               Message(ex.Message);
+                           }
+                       }));
             }
         }
 
-        private void _proxy_ConnectCompleted(object sender, SVC.ConnectCompletedEventArgs e)
+        private async void _proxy_ConnectCompleted(object sender, SVC.ConnectCompletedEventArgs e)
         {
             if (e.Error != null)
             {
                 Message(e.Error.Message);
             }
-            else if(e.Result)
+            else if (e.Result)
             {
-                HandleProxy();
+                await HandleProxy();
             }
             else if (!e.Result)
             {
@@ -227,7 +227,7 @@ namespace WPFClient.ViewModels
         {
             return Task.Run(async () =>
             {
-                
+
                 await Application.Current.Dispatcher.Invoke(async () =>
                 {
                     var parent = Application.Current.MainWindow as MetroWindow;
@@ -241,7 +241,7 @@ namespace WPFClient.ViewModels
                 });
             });
         }
-        private void HandleProxy()
+        private async Task HandleProxy()
         {
             switch (_proxy.State)
             {
@@ -255,12 +255,20 @@ namespace WPFClient.ViewModels
                     Message("Dissconnected");
                     break;
                 case CommunicationState.Opened:
+                    await HideVisibleDialogs();
                     ViewModelLocator.NavigationService.NavigateTo("MainPage", LocalClient);
                     break;
                 default:
                     break;
 
             }
+        }
+
+        private async Task ShowProgressIndicator()
+        {
+            var circularProgressBarDialog = new CustomDialog() { Content = new CircularProgressBar() };
+            await DialogCoordinator.Instance.ShowMetroDialogAsync(this, circularProgressBarDialog);
+            
         }
 
     }

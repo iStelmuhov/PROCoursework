@@ -143,8 +143,7 @@ namespace WPFRoomHost.ViewModels
             get
             {
                 return  _startButtonCommand
-                    ?? ( _startButtonCommand = new RelayCommand(
-                    () =>
+                    ?? ( _startButtonCommand = new RelayCommand(async () =>
                     {
 
                         if (!new IpAdressValidationRule().Validate(ListenIp, CultureInfo.CurrentCulture).IsValid ||
@@ -222,7 +221,7 @@ namespace WPFRoomHost.ViewModels
                         try
                         {
                             NormalMessage("Try to open connection...");
-                            _host.Open();
+                            await Task.Run(() => _host.Open());
                         }
                         catch (Exception ex)
                         {
@@ -246,13 +245,12 @@ namespace WPFRoomHost.ViewModels
             get
             {
                 return  _stopButtonCommand
-                    ?? ( _stopButtonCommand = new RelayCommand(
-                    () =>
+                    ?? ( _stopButtonCommand = new RelayCommand(async () =>
                     {
                        
                             try
                             {
-                                _host?.Close();
+                                await Task.Run(()=>_host?.Close());
                             }
                             catch (Exception ex)
                             {

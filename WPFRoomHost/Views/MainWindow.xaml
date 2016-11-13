@@ -61,9 +61,11 @@
                             Mode="TwoWay"
                             Path="ListenIp"
                             UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
+                            <!--
+                                <Binding.ValidationRules>
                                 <validation:IpAdressValidationRule ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
+                                </Binding.ValidationRules>
+                            -->
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
@@ -77,9 +79,11 @@
                             Mode="TwoWay"
                             Path="Port"
                             UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
+                            <!--
+                                <Binding.ValidationRules>
                                 <validation:PortValidationRule ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
+                                </Binding.ValidationRules>
+                            -->
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
@@ -114,7 +118,6 @@
                         Style="{DynamicResource MaterialDesignRaisedDarkButton}"
                         ToolTip="Start Room Server" />
                     <Button
-                        x:Name="StopButton"
                         Width="100"
                         Margin="5,0,0,0"
                         Command="{Binding StopButton}"

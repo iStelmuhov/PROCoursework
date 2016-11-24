@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace WPFClient.ViewModels
         public SVC.Client LocalClient;
         private delegate void FaultedInvoker();
         public delegate Task TaskInvoker();
+        
         #region Chat
         private ObservableCollection<SVC.Message> _messagesCollection = new ObservableCollection<SVC.Message>();
         public ObservableCollection<SVC.Message> Messages
@@ -123,7 +125,7 @@ namespace WPFClient.ViewModels
             }
         }
 
-        private SVC.LineSettings _lineSettings = new LineSettings() { Color = "black", Thickness = 2 };
+        private SVC.LineSettings _lineSettings = new LineSettings() { Color = "#FF000000", Thickness = 2 };
         public LineSettings LineSettings
         {
             get
@@ -575,6 +577,7 @@ namespace WPFClient.ViewModels
         public void PerfomEndGame()
         {
             Letters.Clear();
+            RefreshClients(Clients.ToList());
         }
 
 

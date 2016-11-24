@@ -9,7 +9,6 @@
     xmlns:conventers="clr-namespace:WPFRoomHost.Conventers"
     xmlns:local="clr-namespace:WPFRoomHost.ViewModels"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:validation="clr-namespace:WPFRoomHost.Validation"
     Height="350"
     Width="700"
     GlowBrush="{DynamicResource AccentColorBrush}"
@@ -23,37 +22,32 @@
         <conventers:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </Window.Resources>
 
-    <Grid x:Name="Root">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition
-                Width="2*"
+                Width="*"
                 MinWidth="210"
                 MaxWidth="450" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="6*" />
-            </Grid.RowDefinitions>
             <Grid
                 HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Row="1">
+                VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <TextBox
+                <!--
+                    <TextBox
                     Grid.Row="0"
                     Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
                     Text="{Binding RoomName}"
                     materialDesign:HintAssist.Hint="Room name" />
+                -->
                 <TextBox
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
                     materialDesign:HintAssist.Hint="Listen IP">
                     <TextBox.Text>
@@ -70,7 +64,7 @@
                     </TextBox.Text>
                 </TextBox>
                 <TextBox
-                    Grid.Row="2"
+                    Grid.Row="1"
                     Margin="0,5,0,5"
                     Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
                     materialDesign:HintAssist.Hint="Port">
@@ -87,24 +81,26 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <TextBox
+                <!--
+                    <TextBox
                     Grid.Row="3"
                     Margin="0,5,0,5"
                     Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
                     materialDesign:HintAssist.Hint="*Main Server IP">
                     <TextBox.Text>
-                        <Binding
-                            Mode="TwoWay"
-                            Path="MainServerIp"
-                            UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <validation:IpAdressValidationRule ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
+                    <Binding
+                    Mode="TwoWay"
+                    Path="MainServerIp"
+                    UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                    <validation:IpAdressValidationRule ValidatesOnTargetUpdated="True" />
+                    </Binding.ValidationRules>
+                    </Binding>
                     </TextBox.Text>
-                </TextBox>
+                    </TextBox>
+                -->
                 <StackPanel
-                    Grid.Row="4"
+                    Grid.Row="2"
                     Margin="0,15,0,0"
                     Orientation="Horizontal">
                     <Button

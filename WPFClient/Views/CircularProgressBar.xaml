@@ -33,7 +33,7 @@
             VerticalAlignment="Center"
             Foreground="#7CBB00"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{DynamicResource MaterialDesignCircularProgressBar}"
             Value="0" />
         <ProgressBar
             Grid.Row="0"

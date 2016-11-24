@@ -5,12 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:validation="clr-namespace:WPFClient.Validation"
     xmlns:viewModels="clr-namespace:WPFClient.ViewModels"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:command="http://www.galasoft.ch/mvvmlight"
     Height="330"
     Width="300"
     dialogs:DialogParticipation.Register="{Binding}"
@@ -35,7 +35,8 @@
             </Grid.RowDefinitions>
             <materialDesign:Card
                 VerticalAlignment="Stretch"
-                Background="{DynamicResource AccentColorBrush}">
+                Background="#1976D2"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0">
                 <StackPanel>
                     <Button
                         Height="120"
@@ -70,27 +71,27 @@
                 VerticalAlignment="Stretch"
                 Background="{Binding LocalClient.Pic.Color}">
                 <StackPanel>
-                    <ComboBox
+                    <TextBox
                         Margin="30,20,30,10"
-                        IsEditable="True"
-                        ItemsSource="{Binding ServersIpCollection}"
-                        SelectedItem="{Binding SelectedIp}"
-                        Style="{DynamicResource MaterialDesignFloatingHintComboBox}"
+                        FontSize="19"
+                        FontWeight="Light"
+                        Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                        Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                        TextAlignment="Center"
                         materialDesign:HintAssist.Hint="Room IP"
                         materialDesign:ValidationAssist.OnlyShowOnFocus="True"
                         materialDesign:ValidationAssist.UsePopup="True">
-                        <ComboBox.Text>
+                        <TextBox.Text>
                             <Binding
-                                Path="NewSelectedServerIp"
-                                UpdateSourceTrigger="LostFocus">
+                                Mode="TwoWay"
+                                Path="SelectedIp"
+                                UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <validation:IpAdressValidationRule
-                                        ValidatesOnTargetUpdated="True"
-                                        ValidationStep="RawProposedValue" />
+                                    <validation:IpAdressValidationRule ValidatesOnTargetUpdated="True" />
                                 </Binding.ValidationRules>
                             </Binding>
-                        </ComboBox.Text>
-                    </ComboBox>
+                        </TextBox.Text>
+                    </TextBox>
                     <Button
                         Command="{Binding LoginCommand}"
                         Content="Login"

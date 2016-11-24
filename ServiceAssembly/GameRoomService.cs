@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Dispatcher;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
@@ -46,11 +47,6 @@ namespace ServiceAssembly
             _answerTimer.Elapsed += _answerTimer_Elapsed;
         }
 
-        private void _liveTestTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            
-        }
-
         private void _answerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (!Game.IsActive)
@@ -76,48 +72,52 @@ namespace ServiceAssembly
         public bool Connect(Client client)
         {
             Monitor.Enter(_syncObj);
-                if (!_clients.ContainsValue(CurrentCallback) &&
-                    !SearchClientsByName(client.Name))
+            if (_clients.ContainsValue(CurrentCallback) || SearchClientsByName(client.Name))
+            {
+                Monitor.Exit(_syncObj);
+                return false;
+            }
+
+            client.Time = DateTime.Now;
+            _clients.Add(client, CurrentCallback);
+            (CurrentCallback as ICommunicationObject).Faulted += GameRoomService_Faulted;
+            (CurrentCallback as ICommunicationObject).Closed += GameRoomService_Faulted;
+
+                if (Game.IsActive)
                 {
-
-                    client.Time = DateTime.Now;
-                    _clients.Add(client, CurrentCallback);
-                    (CurrentCallback as ICommunicationObject).Faulted += GameRoomService_Faulted;
-                    (CurrentCallback as ICommunicationObject).Closed += GameRoomService_Faulted;
-
-                    foreach (Client key in _clients.Keys)
+                    CurrentCallback.PerfomStartGame();
+                    CurrentCallback.ReciveWordInfo(Game.Settings.Word.Length);
+                    foreach (var letterPosition in Game.Settings.Shownletters)
                     {
-                        try
-                        {
-                            IGameCallback callback = _clients[key];
-                            callback.RefreshClients(ClientList);
-                            callback.RefreshLines(_lines);
-                            callback.UserJoin(client);
-
-                            if (Game.IsActive)
-                            {
-                                callback.PerfomStartGame();
-                                callback.ReciveWordInfo(Game.Settings.Word.Length);
-                                foreach (var letterPosition in Game.Settings.Shownletters)
-                                {
-                                    callback.ReciveLetter(Game.Settings.Word.ElementAt(letterPosition), letterPosition);
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            _clients.Remove(SearchClietnsByName(key.Name));
-                        Monitor.Exit(_syncObj);
-                        }
+                        CurrentCallback.ReciveLetter(Game.Settings.Word.ElementAt(letterPosition), letterPosition);
                     }
-                    if (ClientList.Count >= 2)
-                        CheckAndStarNewGame(true);
-                    Monitor.Exit(_syncObj);
-                    return true;
                 }
-             Monitor.Exit(_syncObj);
-            return false;
+               
+                foreach (Client key in _clients.Keys)
+                {
+                    try
+                    {
+                        IGameCallback callback = _clients[key];
+                        callback.RefreshClients(ClientList);
+                        callback.RefreshLines(_lines);
+                        callback.UserJoin(client);
+
+
+                    }
+                    catch
+                    {
+                        _clients.Remove(SearchClietnsByName(key.Name));
+                        _clients.Remove(SearchClietnsByName(client.Name));
+                        Monitor.Exit(_syncObj);
+                    }
+                }
+                if (ClientList.Count >= 2)
+                    CheckAndStarNewGame(true);
+
+            Monitor.Exit(_syncObj);
+            return true;
         }
+        
         public void Disconnect(Client client)
         {
             if(client==null) return;
@@ -261,9 +261,10 @@ namespace ServiceAssembly
 
         public void ReciveGameWord(string word, Client sender)
         {
+
             if (!string.IsNullOrEmpty(word))
             {
-                if (!Game.IsActive)
+                if (!Game.IsActive && _clients.Count >= 2)
                 {
                     Game.StarGame(new GameSettings() { DrawingClient = sender, Word = word, Shownletters = new List<int>() });
                 }

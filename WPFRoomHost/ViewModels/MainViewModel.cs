@@ -15,8 +15,8 @@ namespace WPFRoomHost.ViewModels
     {
         private ServiceHost _host;
 
-        private bool _isActive = false;
-        public bool IsActive
+        private bool? _isActive = false;
+        public bool? IsActive
         {
             get
             {
@@ -152,7 +152,7 @@ namespace WPFRoomHost.ViewModels
                             WarningMessage("Check Listen Ip adress and Port");
                             return;
                         }
-
+                        IsActive = null;
                         if (!string.IsNullOrWhiteSpace(MainServerIp) || !string.IsNullOrEmpty(MainServerIp))
                         {
                             if (!new IpAdressValidationRule().Validate(MainServerIp, CultureInfo.CurrentCulture).IsValid)
@@ -202,6 +202,7 @@ namespace WPFRoomHost.ViewModels
                         }
 
                         tcpBinding.ReceiveTimeout = new TimeSpan(20, 0, 0);
+                        tcpBinding.SendTimeout = new TimeSpan(0,0,7);
                         tcpBinding.ReliableSession.Enabled = true;
                         tcpBinding.ReliableSession.Ordered = false;
                         tcpBinding.ReliableSession.InactivityTimeout =
@@ -225,6 +226,7 @@ namespace WPFRoomHost.ViewModels
                         }
                         catch (Exception ex)
                         {
+                            IsActive = false;
                            FailureMessage(ex.Message);
                         }
                         finally
@@ -246,8 +248,8 @@ namespace WPFRoomHost.ViewModels
             {
                 return  _stopButtonCommand
                     ?? ( _stopButtonCommand = new RelayCommand(async () =>
-                    {
-                       
+                        {
+                            IsActive = null;
                             try
                             {
                                 await Task.Run(()=>_host?.Close());
@@ -255,6 +257,7 @@ namespace WPFRoomHost.ViewModels
                             catch (Exception ex)
                             {
                                 FailureMessage(ex.Message);
+                                IsActive = false;
                             }
                             finally
                             {

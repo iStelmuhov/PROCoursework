@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -70,27 +71,7 @@ namespace WPFClient.ViewModels
             }
         }
 
-        private ObservableCollection<string> _serversIPsCollection = new ObservableCollection<string>() { "localhost" };
-        public ObservableCollection<string> ServersIpCollection
-        {
-            get
-            {
-                return _serversIPsCollection;
-            }
-
-            set
-            {
-                if (_serversIPsCollection == value)
-                {
-                    return;
-                }
-
-                _serversIPsCollection = value;
-                RaisePropertyChanged(nameof(ServersIpCollection));
-            }
-        }
-
-        private string _selectedIp = string.Empty;
+        private string _selectedIp = "localhost:7997";
         public string SelectedIp
         {
             get
@@ -107,19 +88,6 @@ namespace WPFClient.ViewModels
 
                 _selectedIp = value;
                 RaisePropertyChanged(nameof(SelectedIp));
-            }
-        }
-
-        public string NewSelectedServerIp
-        {
-            set
-            {
-
-                if (!string.IsNullOrEmpty(value))
-                {
-                    _serversIPsCollection.Add(value);
-                    SelectedIp = value;
-                }
             }
         }
 
@@ -152,6 +120,23 @@ namespace WPFClient.ViewModels
             }
         }
 
+        #region RegExp
+        /// <summary>
+        /// Determines whether the username meets conditions.
+        /// Username conditions:
+        /// Must be 1 to 12 character in length
+        /// Must start with letter a-zA-Z
+        /// May contain letters, numbers or '.','-' or '_'
+        /// Must not end in '.','-','._' or '-_' 
+        /// </summary>
+        private const string NameRegExp = @"^(?=[a-zA-Z])[-\w.]{0,11}([a-zA-Z\d]|(?<![-.])_)$";
+
+        private const string IpPortRegExp = @"((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?):(\d){4}";
+        private const string ValidationPetternLocalhost = @"localhost:[0-9]{4}";
+        #endregion
+
+
+
         private RelayCommand _loginCommand;
         public RelayCommand LoginCommand
         {
@@ -160,6 +145,25 @@ namespace WPFClient.ViewModels
                 return _loginCommand
                     ?? (_loginCommand = new RelayCommand(async () =>
                        {
+                           if (!Regex.Match(Name, NameRegExp).Success)
+                           {
+                               Message("Wrong name format");
+                               return;
+                           }
+
+                           string ip, port;
+                           if (Regex.Match(SelectedIp, IpPortRegExp).Success | Regex.Match(SelectedIp,ValidationPetternLocalhost).Success)
+                           {
+                               string[] split = SelectedIp.Split(':');
+                               ip = split[0];
+                               port = split[1];
+                           }
+                           else
+                           {
+                               Message("Wrong IP adress");
+                               return;
+                           }
+
                            _proxy = null;
                            try
                            {
@@ -170,9 +174,8 @@ namespace WPFClient.ViewModels
                                _proxy = new SVC.GameClient(context);
 
                                string servicePath = _proxy.Endpoint.ListenUri.AbsolutePath;
-                               string serviceListenPort = _proxy.Endpoint.Address.Uri.Port.ToString();
 
-                               _proxy.Endpoint.Address = new EndpointAddress($"net.tcp://{SelectedIp}:{serviceListenPort}{servicePath}");
+                               _proxy.Endpoint.Address = new EndpointAddress($"net.tcp://{ip}:{port}{servicePath}");
 
                                _proxy.Open();
 
@@ -191,6 +194,7 @@ namespace WPFClient.ViewModels
 
         private async void _proxy_ConnectCompleted(object sender, SVC.ConnectCompletedEventArgs e)
         {
+            await HideVisibleDialogs();
             if (e.Error != null)
             {
                 Message(e.Error.Message);
@@ -200,7 +204,7 @@ namespace WPFClient.ViewModels
                 await HandleProxy();
             }
             else if (!e.Result)
-            {
+            {              
                 Message("Name found");
             }
         }

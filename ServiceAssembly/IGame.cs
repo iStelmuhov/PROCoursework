@@ -39,5 +39,8 @@ namespace ServiceAssembly
         [OperationContract(IsOneWay = true)]
         void DrawerResponce(Client sender,bool answer);
 
+        [OperationContract(IsOneWay = true)]
+        void ClearLines(Client sender);
+
     }
 }

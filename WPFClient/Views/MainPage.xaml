@@ -51,10 +51,6 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="23*" />
-                        <RowDefinition Height="2*" />
-                    </Grid.RowDefinitions>
                     <ItemsControl
                         x:Name="DrawControl"
                         ItemsSource="{Binding LinesCollection}">
@@ -87,7 +83,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Line
-                                    SnapsToDevicePixels="True"
+                                    Stretch="None"
                                     Stroke="{Binding Settings.Color}"
                                     StrokeThickness="{Binding Settings.Thickness}"
                                     X1="{Binding X1}"
@@ -96,66 +92,50 @@
                                     Y2="{Binding Y2}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
+                        <ItemsControl.ContextMenu>
+                            <ContextMenu Background="{DynamicResource AccentBaseColorBrush}">
+                                <MenuItem>
+                                    <MenuItem.Header>
+                                        <xctk:ColorPicker
+                                            x:Name="ColorPicker"
+                                            VerticalAlignment="Center"
+                                            Background="{Binding
+                                                ElementName=ColorPicker,
+                                                Path=SelectedColor}"
+                                            ButtonStyle="{DynamicResource MaterialDesignActionAccentToggleButton}"
+                                            ColorMode="ColorCanvas"
+                                            SelectedColor="{Binding
+                                                LineSettings.Color,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                Mode=TwoWay}"
+                                            ToolTip="Color Select" />
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem>
+                                    <MenuItem.Header>
+                                        <Button
+                                            Height="30"
+                                            Width="30"
+                                            Command="{Binding ClearLines}"
+                                            Style="{DynamicResource MaterialDesignFloatingActionDarkButton}"
+                                            ToolTip="Clear">
+                                            <Viewbox
+                                                Height="25"
+                                                Width="25">
+                                                <Canvas
+                                                    Height="24"
+                                                    Width="24">
+                                                    <Path
+                                                        Data="M20.37,8.91L19.37,10.64L7.24,3.64L8.24,1.91L11.28,3.66L12.64,3.29L16.97,5.79L17.34,7.16L20.37,8.91M6,19V7H11.07L18,11V19A2,2 0 0,1 16,21H8A2,2 0 0,1 6,19Z"
+                                                        Fill="{Binding LineSettings.Color}" />
+                                                </Canvas>
+                                            </Viewbox>
+                                        </Button>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                            </ContextMenu>
+                        </ItemsControl.ContextMenu>
                     </ItemsControl>
-                    <Grid
-                        Grid.Row="1"
-                        Background="{DynamicResource AccentBaseColorBrush}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal">
-                            <Label
-                                VerticalAlignment="Center"
-                                Content="Color"
-                                FontSize="19"
-                                FontWeight="Light"
-                                Foreground="{Binding LineSettings.Color}" />
-                            <xctk:ColorPicker
-                                x:Name="ColorPicker"
-                                VerticalAlignment="Center"
-                                Background="{Binding
-                                    ElementName=ColorPicker,
-                                    Path=SelectedColor}"
-                                ButtonStyle="{DynamicResource MaterialDesignActionAccentToggleButton}"
-                                ColorMode="ColorCanvas"
-                                SelectedColor="{Binding
-                                    LineSettings.Color,
-                                    UpdateSourceTrigger=PropertyChanged,
-                                    Mode=TwoWay}"
-                                ToolTip="Color Select" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Column="1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal"
-                            materialDesign:ColorZoneAssist.Mode="Inverted">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="19"
-                                FontWeight="Light"
-                                Text="Thickness" />
-                            <Slider
-                                Height="20"
-                                Width="150"
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                Foreground="{Binding LineSettings.Color}"
-                                IsEnabled="True"
-                                Maximum="100"
-                                Minimum="0"
-                                ToolTip="Line Thickness"
-                                Value="{Binding
-                                    LineSettings.Thickness,
-                                    Mode=TwoWay,
-                                    UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                    </Grid>
-
                 </Grid>
 
                 <Grid

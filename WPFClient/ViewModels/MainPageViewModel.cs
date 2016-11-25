@@ -145,6 +145,8 @@ namespace WPFClient.ViewModels
             }
         }
 
+        private bool _isDrawing = false;
+
         private RelayCommand<MouseArgs> _drawmMouseDownCommand;
         public RelayCommand<MouseArgs> DrawMouseDown
         {
@@ -155,7 +157,10 @@ namespace WPFClient.ViewModels
                     (key) =>
                     {
                         if (key.ButtonState == MouseButtonState.Pressed)
+                        {
                             CurrentPoint = key.Point;
+                            _isDrawing = true;
+                        }
                     }));
             }
         }
@@ -169,7 +174,7 @@ namespace WPFClient.ViewModels
                     ?? (_drawMouseMoveCommand = new RelayCommand<MouseArgs>(
                     (key) =>
                     {
-                        if (key.ButtonState == MouseButtonState.Pressed)
+                        if (key.ButtonState == MouseButtonState.Pressed && _isDrawing)
                         {
                             Line line = new Line
                             {
@@ -205,7 +210,24 @@ namespace WPFClient.ViewModels
                     ?? (_drawMouseUpCommand = new RelayCommand<MouseButtonEventArgs>(
                     (key) =>
                     {
+                        if (key.ButtonState == MouseButtonState.Released)
+                        {
+                            _isDrawing = false;
+                        }
+                    }));
+            }
+        }
 
+        private RelayCommand _clearLinesCommand;
+        public RelayCommand ClearLines
+        {
+            get
+            {
+                return  _clearLinesCommand
+                    ?? ( _clearLinesCommand = new RelayCommand(
+                    () =>
+                    {
+                        ViewModelLocator.Proxy.ClearLines(LocalClient);
                     }));
             }
         }

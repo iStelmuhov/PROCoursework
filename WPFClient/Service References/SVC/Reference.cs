@@ -521,6 +521,14 @@ namespace WPFClient.SVC {
         System.IAsyncResult BeginDrawerResponce(WPFClient.SVC.Client sender, bool answer, System.AsyncCallback callback, object asyncState);
         
         void EndDrawerResponce(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/ClearLines")]
+        void ClearLines(WPFClient.SVC.Client sender);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/ClearLines")]
+        System.IAsyncResult BeginClearLines(WPFClient.SVC.Client sender, System.AsyncCallback callback, object asyncState);
+        
+        void EndClearLines(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -732,6 +740,12 @@ namespace WPFClient.SVC {
         
         private System.Threading.SendOrPostCallback onDrawerResponceCompletedDelegate;
         
+        private BeginOperationDelegate onBeginClearLinesDelegate;
+        
+        private EndOperationDelegate onEndClearLinesDelegate;
+        
+        private System.Threading.SendOrPostCallback onClearLinesCompletedDelegate;
+        
         public GameClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
@@ -773,6 +787,8 @@ namespace WPFClient.SVC {
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> ReciveGameWordCompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> DrawerResponceCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> ClearLinesCompleted;
         
         public bool Connect(WPFClient.SVC.Client client) {
             return base.Channel.Connect(client);
@@ -1314,6 +1330,55 @@ namespace WPFClient.SVC {
             base.InvokeAsync(this.onBeginDrawerResponceDelegate, new object[] {
                         sender,
                         answer}, this.onEndDrawerResponceDelegate, this.onDrawerResponceCompletedDelegate, userState);
+        }
+        
+        public void ClearLines(WPFClient.SVC.Client sender) {
+            base.Channel.ClearLines(sender);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginClearLines(WPFClient.SVC.Client sender, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginClearLines(sender, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndClearLines(System.IAsyncResult result) {
+            base.Channel.EndClearLines(result);
+        }
+        
+        private System.IAsyncResult OnBeginClearLines(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            WPFClient.SVC.Client sender = ((WPFClient.SVC.Client)(inValues[0]));
+            return this.BeginClearLines(sender, callback, asyncState);
+        }
+        
+        private object[] OnEndClearLines(System.IAsyncResult result) {
+            this.EndClearLines(result);
+            return null;
+        }
+        
+        private void OnClearLinesCompleted(object state) {
+            if ((this.ClearLinesCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.ClearLinesCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void ClearLinesAsync(WPFClient.SVC.Client sender) {
+            this.ClearLinesAsync(sender, null);
+        }
+        
+        public void ClearLinesAsync(WPFClient.SVC.Client sender, object userState) {
+            if ((this.onBeginClearLinesDelegate == null)) {
+                this.onBeginClearLinesDelegate = new BeginOperationDelegate(this.OnBeginClearLines);
+            }
+            if ((this.onEndClearLinesDelegate == null)) {
+                this.onEndClearLinesDelegate = new EndOperationDelegate(this.OnEndClearLines);
+            }
+            if ((this.onClearLinesCompletedDelegate == null)) {
+                this.onClearLinesCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnClearLinesCompleted);
+            }
+            base.InvokeAsync(this.onBeginClearLinesDelegate, new object[] {
+                        sender}, this.onEndClearLinesDelegate, this.onClearLinesCompletedDelegate, userState);
         }
     }
 }

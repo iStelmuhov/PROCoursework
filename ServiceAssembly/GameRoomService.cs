@@ -95,22 +95,21 @@ namespace ServiceAssembly
                
                 foreach (Client key in _clients.Keys)
                 {
-                    try
-                    {
+                    //try
+                    //{
                         IGameCallback callback = _clients[key];
                         callback.RefreshClients(ClientList);
                         callback.RefreshLines(_lines);
                         callback.UserJoin(client);
 
 
-                    }
-                    catch
-                    {
-                        _clients.Remove(SearchClietnsByName(key.Name));
-                        _clients.Remove(SearchClietnsByName(client.Name));
-                        Monitor.Exit(_syncObj);
-                    }
-                }
+            //}
+            //        catch
+            //{
+            //    _clients.Remove(SearchClietnsByName(key.Name));
+            //    Monitor.Exit(_syncObj);
+            //}
+        }
                 if (ClientList.Count >= 2)
                     CheckAndStarNewGame(true);
 
@@ -300,7 +299,20 @@ namespace ServiceAssembly
             }
         }
 
-        private List<string> items = new List<string>() { "One", "Two", "Three" };
+        public void ClearLines(Client sender)
+        {
+            if (Game.IsActive && !sender.Equals(Game.Settings.DrawingClient))
+                return;
+
+            lock (_gameSync)
+            {                
+                foreach (IGameCallback callback in _clients.Values)
+                {
+                    callback.RefreshLines(new List<Line>());
+                }
+            }
+        }
+
         private void CheckAndStarNewGame(bool isConnect = false)
         {
             if (ClientList.Count < 2) return;

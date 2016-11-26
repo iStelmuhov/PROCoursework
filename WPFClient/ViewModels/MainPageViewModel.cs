@@ -295,6 +295,8 @@ namespace WPFClient.ViewModels
                                 new TaskInvoker(HideVisibleDialogs));
 
                         });
+
+                        ViewModelLocator.Proxy.GetStartInformation(LocalClient);
                     }));
             }
         }

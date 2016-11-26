@@ -529,6 +529,14 @@ namespace WPFClient.SVC {
         System.IAsyncResult BeginClearLines(WPFClient.SVC.Client sender, System.AsyncCallback callback, object asyncState);
         
         void EndClearLines(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/GetStartInformation")]
+        void GetStartInformation(WPFClient.SVC.Client sender);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/GetStartInformation")]
+        System.IAsyncResult BeginGetStartInformation(WPFClient.SVC.Client sender, System.AsyncCallback callback, object asyncState);
+        
+        void EndGetStartInformation(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -746,6 +754,12 @@ namespace WPFClient.SVC {
         
         private System.Threading.SendOrPostCallback onClearLinesCompletedDelegate;
         
+        private BeginOperationDelegate onBeginGetStartInformationDelegate;
+        
+        private EndOperationDelegate onEndGetStartInformationDelegate;
+        
+        private System.Threading.SendOrPostCallback onGetStartInformationCompletedDelegate;
+        
         public GameClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
@@ -789,6 +803,8 @@ namespace WPFClient.SVC {
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> DrawerResponceCompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> ClearLinesCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GetStartInformationCompleted;
         
         public bool Connect(WPFClient.SVC.Client client) {
             return base.Channel.Connect(client);
@@ -1379,6 +1395,55 @@ namespace WPFClient.SVC {
             }
             base.InvokeAsync(this.onBeginClearLinesDelegate, new object[] {
                         sender}, this.onEndClearLinesDelegate, this.onClearLinesCompletedDelegate, userState);
+        }
+        
+        public void GetStartInformation(WPFClient.SVC.Client sender) {
+            base.Channel.GetStartInformation(sender);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginGetStartInformation(WPFClient.SVC.Client sender, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetStartInformation(sender, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndGetStartInformation(System.IAsyncResult result) {
+            base.Channel.EndGetStartInformation(result);
+        }
+        
+        private System.IAsyncResult OnBeginGetStartInformation(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            WPFClient.SVC.Client sender = ((WPFClient.SVC.Client)(inValues[0]));
+            return this.BeginGetStartInformation(sender, callback, asyncState);
+        }
+        
+        private object[] OnEndGetStartInformation(System.IAsyncResult result) {
+            this.EndGetStartInformation(result);
+            return null;
+        }
+        
+        private void OnGetStartInformationCompleted(object state) {
+            if ((this.GetStartInformationCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GetStartInformationCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GetStartInformationAsync(WPFClient.SVC.Client sender) {
+            this.GetStartInformationAsync(sender, null);
+        }
+        
+        public void GetStartInformationAsync(WPFClient.SVC.Client sender, object userState) {
+            if ((this.onBeginGetStartInformationDelegate == null)) {
+                this.onBeginGetStartInformationDelegate = new BeginOperationDelegate(this.OnBeginGetStartInformation);
+            }
+            if ((this.onEndGetStartInformationDelegate == null)) {
+                this.onEndGetStartInformationDelegate = new EndOperationDelegate(this.OnEndGetStartInformation);
+            }
+            if ((this.onGetStartInformationCompletedDelegate == null)) {
+                this.onGetStartInformationCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetStartInformationCompleted);
+            }
+            base.InvokeAsync(this.onBeginGetStartInformationDelegate, new object[] {
+                        sender}, this.onEndGetStartInformationDelegate, this.onGetStartInformationCompletedDelegate, userState);
         }
     }
 }

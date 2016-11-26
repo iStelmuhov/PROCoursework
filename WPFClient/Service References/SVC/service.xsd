@@ -93,59 +93,66 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetStartInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="sender" nillable="true" type="q10:Client" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="RefreshClients">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="clients" nillable="true" type="q10:ArrayOfClient" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="clients" nillable="true" type="q11:ArrayOfClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Receive">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="msg" nillable="true" type="q11:Message" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="msg" nillable="true" type="q12:Message" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveLine">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="line" nillable="true" type="q12:Line" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="line" nillable="true" type="q13:Line" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RefreshLines">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="line" nillable="true" type="q13:ArrayOfLine" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="line" nillable="true" type="q14:ArrayOfLine" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="IsWritingCallback">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="client" nillable="true" type="q14:Client" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="client" nillable="true" type="q15:Client" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UserJoin">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="client" nillable="true" type="q15:Client" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="client" nillable="true" type="q16:Client" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UserLeave">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="client" nillable="true" type="q16:Client" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="client" nillable="true" type="q17:Client" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReciveLetter">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="letter" type="q17:char" />
+        <xs:element xmlns:q18="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="letter" type="q18:char" />
         <xs:element minOccurs="0" name="position" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -165,7 +172,7 @@
   <xs:element name="WordChoose">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="words" nillable="true" type="q18:ArrayOfstring" />
+        <xs:element xmlns:q19="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="words" nillable="true" type="q19:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

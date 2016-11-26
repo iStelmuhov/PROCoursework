@@ -42,5 +42,8 @@ namespace ServiceAssembly
         [OperationContract(IsOneWay = true)]
         void ClearLines(Client sender);
 
+        [OperationContract(IsOneWay = true)]
+        void GetStartInformation(Client sender);
+
     }
 }

@@ -78,38 +78,32 @@ namespace ServiceAssembly
                 return false;
             }
 
+            foreach (Client key in _clients.Keys)
+            {
+                //try
+                //{
+                IGameCallback callback = _clients[key];
+                callback.RefreshClients(ClientList);
+                callback.RefreshLines(_lines);
+                callback.UserJoin(client);
+
+
+                //}
+                //        catch
+                //{
+                //    _clients.Remove(SearchClietnsByName(key.Name));
+                //    Monitor.Exit(_syncObj);
+                //}
+            }
+
             client.Time = DateTime.Now;
             _clients.Add(client, CurrentCallback);
             (CurrentCallback as ICommunicationObject).Faulted += GameRoomService_Faulted;
             (CurrentCallback as ICommunicationObject).Closed += GameRoomService_Faulted;
 
-                if (Game.IsActive)
-                {
-                    CurrentCallback.PerfomStartGame();
-                    CurrentCallback.ReciveWordInfo(Game.Settings.Word.Length);
-                    foreach (var letterPosition in Game.Settings.Shownletters)
-                    {
-                        CurrentCallback.ReciveLetter(Game.Settings.Word.ElementAt(letterPosition), letterPosition);
-                    }
-                }
+                
                
-                foreach (Client key in _clients.Keys)
-                {
-                    //try
-                    //{
-                        IGameCallback callback = _clients[key];
-                        callback.RefreshClients(ClientList);
-                        callback.RefreshLines(_lines);
-                        callback.UserJoin(client);
-
-
-            //}
-            //        catch
-            //{
-            //    _clients.Remove(SearchClietnsByName(key.Name));
-            //    Monitor.Exit(_syncObj);
-            //}
-        }
+               
                 if (ClientList.Count >= 2)
                     CheckAndStarNewGame(true);
 
@@ -311,6 +305,23 @@ namespace ServiceAssembly
                     callback.RefreshLines(new List<Line>());
                 }
             }
+        }
+
+        public void GetStartInformation(Client sender)
+        {
+            if (Game.IsActive)
+            {
+                CurrentCallback.PerfomStartGame();
+                CurrentCallback.ReciveWordInfo(Game.Settings.Word.Length);
+                foreach (var letterPosition in Game.Settings.Shownletters)
+                {
+                    CurrentCallback.ReciveLetter(Game.Settings.Word.ElementAt(letterPosition), letterPosition);
+                }
+            }
+
+            CurrentCallback.RefreshClients(ClientList);
+            CurrentCallback.RefreshLines(_lines);
+            CurrentCallback.UserJoin(sender);
         }
 
         private void CheckAndStarNewGame(bool isConnect = false)

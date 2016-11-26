@@ -63,6 +63,9 @@
   <wsdl:message name="IGame_ClearLines_InputMessage">
     <wsdl:part name="parameters" element="tns:ClearLines" />
   </wsdl:message>
+  <wsdl:message name="IGame_GetStartInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStartInformation" />
+  </wsdl:message>
   <wsdl:message name="IGame_RefreshClients_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:RefreshClients" />
   </wsdl:message>
@@ -142,6 +145,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ClearLines">
       <wsdl:input wsaw:Action="http://tempuri.org/IGame/ClearLines" message="tns:IGame_ClearLines_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetStartInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGame/GetStartInformation" message="tns:IGame_GetStartInformation_InputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="RefreshClients">
       <wsdl:output wsaw:Action="http://tempuri.org/IGame/RefreshClients" message="tns:IGame_RefreshClients_OutputCallbackMessage" />
@@ -261,6 +267,12 @@
     </wsdl:operation>
     <wsdl:operation name="ClearLines">
       <soap12:operation soapAction="http://tempuri.org/IGame/ClearLines" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetStartInformation">
+      <soap12:operation soapAction="http://tempuri.org/IGame/GetStartInformation" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

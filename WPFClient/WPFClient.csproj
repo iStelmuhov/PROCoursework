@@ -207,6 +207,9 @@
     <None Include="Service References\SVC\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\SVC\MS.Internal1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\SVC\service.wsdl" />
     <None Include="Service References\SVC\service.xsd">
       <SubType>Designer</SubType>
@@ -215,6 +218,15 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\SVC\ServiceAssembly.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SVC\System.Windows.Ink1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SVC\System.Windows.Input1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SVC\System.Windows.Media1.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

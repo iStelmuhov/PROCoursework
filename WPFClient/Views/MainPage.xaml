@@ -50,54 +50,22 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Grid>
-                    <ItemsControl
-                        x:Name="DrawControl"
-                        ItemsSource="{Binding LinesCollection}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDown">
-                                <command:EventToCommand
-                                    Command="{Binding DrawMouseDown}"
-                                    EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
-                                    EventArgsConverterParameter="{Binding ElementName=DrawControl}"
-                                    PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                            <i:EventTrigger EventName="MouseMove">
-                                <command:EventToCommand
-                                    Command="{Binding DrawMouseMove}"
-                                    EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
-                                    EventArgsConverterParameter="{Binding ElementName=DrawControl}"
-                                    PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                            <i:EventTrigger EventName="MouseUp">
-                                <command:EventToCommand
-                                    Command="{Binding DrawMouseUp}"
-                                    PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <Canvas Background="{DynamicResource MaterialDesignPaper}" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Line
-                                    Stretch="None"
-                                    Stroke="{Binding Settings.Color}"
-                                    StrokeThickness="{Binding Settings.Thickness}"
-                                    X1="{Binding X1}"
-                                    X2="{Binding X2}"
-                                    Y1="{Binding Y1}"
-                                    Y2="{Binding Y2}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ContextMenu>
-                            <ContextMenu Background="{DynamicResource AccentBaseColorBrush}">
-                                <MenuItem>
-                                    <MenuItem.Header>
+                <InkCanvas
+                    Grid.Column="0"
+                    DefaultDrawingAttributes="{Binding DrawAttributes}"
+                    IsEnabled="{Binding IsDrawer}"
+                    Strokes="{Binding
+                        Strokes,
+                        Mode=TwoWay}">
+                    <InkCanvas.ContextMenu>
+                        <ContextMenu Background="{DynamicResource AccentBaseColorBrush}">
+                            <MenuItem>
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Select color" />
                                         <xctk:ColorPicker
                                             x:Name="ColorPicker"
+                                            Margin="10,0,0,0"
                                             VerticalAlignment="Center"
                                             Background="{Binding
                                                 ElementName=ColorPicker,
@@ -105,17 +73,21 @@
                                             ButtonStyle="{DynamicResource MaterialDesignActionAccentToggleButton}"
                                             ColorMode="ColorCanvas"
                                             SelectedColor="{Binding
-                                                LineSettings.Color,
+                                                DrawAttributes.Color,
                                                 UpdateSourceTrigger=PropertyChanged,
                                                 Mode=TwoWay}"
                                             ToolTip="Color Select" />
-                                    </MenuItem.Header>
-                                </MenuItem>
-                                <MenuItem>
-                                    <MenuItem.Header>
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem>
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Clear canvas" />
                                         <Button
                                             Height="30"
                                             Width="30"
+                                            Margin="10,0,0,0"
                                             Command="{Binding ClearLines}"
                                             Style="{DynamicResource MaterialDesignFloatingActionDarkButton}"
                                             ToolTip="Clear">
@@ -127,19 +99,32 @@
                                                     Width="24">
                                                     <Path
                                                         Data="M20.37,8.91L19.37,10.64L7.24,3.64L8.24,1.91L11.28,3.66L12.64,3.29L16.97,5.79L17.34,7.16L20.37,8.91M6,19V7H11.07L18,11V19A2,2 0 0,1 16,21H8A2,2 0 0,1 6,19Z"
-                                                        Fill="{Binding LineSettings.Color}" />
+                                                        Fill="{DynamicResource MaterialDesignDarkForeground}" />
                                                 </Canvas>
                                             </Viewbox>
                                         </Button>
-                                    </MenuItem.Header>
-                                </MenuItem>
-                            </ContextMenu>
-                        </ItemsControl.ContextMenu>
-                    </ItemsControl>
-                </Grid>
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem>
+                                <MenuItem.Header>
+                                    <Slider
+                                        Foreground="{DynamicResource MaterialDesignDarkForeground}"
+                                        Maximum="50"
+                                        Minimum="1"
+                                        ToolTip="Thickness"
+                                        Value="{Binding
+                                            LineThickness,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                                        controls:SliderHelper.EnableMouseWheel="MouseHover" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </ContextMenu>
+                    </InkCanvas.ContextMenu>
+                </InkCanvas>
 
                 <Grid
-                    x:Name="UserSide"
                     Grid.Column="1"
                     Background="{DynamicResource AccentBaseColorBrush}">
                     <Grid.RowDefinitions>

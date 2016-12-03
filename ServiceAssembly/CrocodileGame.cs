@@ -10,7 +10,7 @@ namespace ServiceAssembly
         public bool IsActive { get; private set; }
 
         private GameRoomService GameService { get;}
-        private Timer _gameOverTimer;
+
         private Timer _sendLetterTimer;
 
         protected CrocodileGame()
@@ -28,13 +28,13 @@ namespace ServiceAssembly
         {
             Settings = settings;
 
-            ConfigurateTimers();
+            _sendLetterTimer = new Timer(40000);
 
             IsActive = true;
-            _gameOverTimer.Elapsed += _gameOverTimer_Elapsed;
+
             _sendLetterTimer.Elapsed += _sendLetterTimer_Elapsed;
 
-            _gameOverTimer.Start();
+
             _sendLetterTimer.Start();
 
             GameService.StartNewGame();
@@ -48,7 +48,6 @@ namespace ServiceAssembly
             Settings = null;
             IsActive = false;
 
-            _gameOverTimer.Stop();
             _sendLetterTimer.Stop();
 
             GameService.EndGame();
@@ -69,13 +68,13 @@ namespace ServiceAssembly
 
         private void _sendLetterTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            SendRandomLetter();
-        }
-
-        private void _gameOverTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            GameService.Say(new Message(GameService.Admin, $"Time out!\nGame ended!\n No one guessed the word:{Settings.Word}\n"));
-            EndGame();
+            if (Settings.Shownletters.Count == Settings.Word.Length - 1)
+            {
+                GameService.Say(new Message(GameService.Admin, $"Time out!\nGame ended!\n No one guessed the word:{Settings.Word}\n"));
+                EndGame();
+            }
+            else 
+                SendRandomLetter();
         }
 
         private char SendRandomLetter()
@@ -95,15 +94,6 @@ namespace ServiceAssembly
             return w.ElementAt(randPosition);
         }
 
-        private void ConfigurateTimers()
-        {
-            int lettersCount = Settings.Word.Length;
-            int interval = lettersCount*75000;
-
-            _gameOverTimer =new Timer(interval);
-            _sendLetterTimer=new Timer(50000); //SET 85!
-
-        }
 
         public bool CheckWord(string word)
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Windows.Ink;
 
 namespace ServiceAssembly
 {
@@ -41,7 +42,7 @@ namespace ServiceAssembly
         void WordChoose(List<string> words );
 
         [OperationContract(IsOneWay = true)]
-        void PerfomStartGame();
+        void PerfomStartGame(Client mainPlayer);
 
         [OperationContract(IsOneWay = true)]
         void PerfomEndGame();

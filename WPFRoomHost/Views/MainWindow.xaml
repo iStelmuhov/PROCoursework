@@ -108,9 +108,7 @@
                         Width="100"
                         Command="{Binding StartButton}"
                         Content="Start"
-                        IsEnabled="{Binding
-                            IsActive,
-                            Converter={StaticResource InverseBooleanConverter}}"
+                        IsEnabled="{Binding IsStartActive}"
                         Style="{DynamicResource MaterialDesignRaisedDarkButton}"
                         ToolTip="Start Room Server" />
                     <Button
@@ -118,7 +116,7 @@
                         Margin="5,0,0,0"
                         Command="{Binding StopButton}"
                         Content="Stop"
-                        IsEnabled="{Binding IsActive}"
+                        IsEnabled="{Binding IsStopActive}"
                         Style="{DynamicResource MaterialDesignRaisedDarkButton}"
                         ToolTip="Start Room Server" />
                 </StackPanel>

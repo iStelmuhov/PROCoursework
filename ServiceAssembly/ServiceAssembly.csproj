@@ -119,6 +119,7 @@
       <HintPath>..\packages\LingvoNET.1.1.0\lib\LingvoNET.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

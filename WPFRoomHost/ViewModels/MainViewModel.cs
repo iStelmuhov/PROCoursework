@@ -15,43 +15,43 @@ namespace WPFRoomHost.ViewModels
     {
         private ServiceHost _host;
 
-        private bool? _isActive = false;
-        public bool? IsActive
+        private bool _isStartActive = true;
+        public bool IsStartActive
         {
             get
             {
-                return _isActive;
+                return _isStartActive;
             }
 
             set
             {
-                if (_isActive == value)
+                if (_isStartActive == value)
                 {
                     return;
                 }
 
-                _isActive = value;
-                RaisePropertyChanged(nameof(IsActive));
+                _isStartActive = value;
+                RaisePropertyChanged(nameof(IsStartActive));
             }
         }
 
-        private string _roomName;
-        public string RoomName
+        private bool _isStopActive = false;
+        public bool IsStopActive
         {
             get
             {
-                return _roomName;
+                return _isStopActive;
             }
 
             set
             {
-                if (_roomName == value)
+                if (_isStopActive == value)
                 {
                     return;
                 }
 
-                _roomName = value;
-                RaisePropertyChanged(nameof(RoomName));
+                _isStopActive = value;
+                RaisePropertyChanged(nameof(IsStopActive));
             }
         }
 
@@ -95,26 +95,6 @@ namespace WPFRoomHost.ViewModels
             }
         }
 
-        private string _mainServerIp;
-        public string MainServerIp
-        {
-            get
-            {
-                return _mainServerIp;
-            }
-
-            set
-            {
-                if (_mainServerIp == value)
-                {
-                    return;
-                }
-
-                _mainServerIp = value;
-                RaisePropertyChanged(nameof(MainServerIp));
-            }
-        }
-
 
 
         private ObservableCollection<LogMessage> _log = new ObservableCollection<LogMessage>();
@@ -152,16 +132,8 @@ namespace WPFRoomHost.ViewModels
                             WarningMessage("Check Listen Ip adress and Port");
                             return;
                         }
-                        IsActive = null;
-                        if (!string.IsNullOrWhiteSpace(MainServerIp) || !string.IsNullOrEmpty(MainServerIp))
-                        {
-                            if (!new IpAdressValidationRule().Validate(MainServerIp, CultureInfo.CurrentCulture).IsValid)
-                            {
-                                WarningMessage("Check Main sever IP");
-                                return;
-                            }
-                        }
 
+                        IsStartActive = false;
                         NormalMessage("Start configuration");
 
                         Uri tcpAdrs = new Uri($"net.tcp://{ListenIp}:{Port}/Host/");
@@ -226,16 +198,21 @@ namespace WPFRoomHost.ViewModels
                         }
                         catch (Exception ex)
                         {
-                            IsActive = false;
+                            IsStartActive = true;
                            FailureMessage(ex.Message);
                         }
                         finally
                         {
                             if (_host.State == CommunicationState.Opened)
                             {
-                                IsActive = true;
+                                IsStopActive = true;
                                 SuccessMessage("Communication open!");
                             }
+                            else
+                            {
+                                IsStartActive = true;
+                            }
+                            
                         }
                     }));
             }
@@ -249,22 +226,29 @@ namespace WPFRoomHost.ViewModels
                 return  _stopButtonCommand
                     ?? ( _stopButtonCommand = new RelayCommand(async () =>
                         {
-                            IsActive = null;
+                           
                             try
                             {
+                                IsStopActive = false;
                                 await Task.Run(()=>_host?.Close());
                             }
                             catch (Exception ex)
                             {
+                                IsStopActive = true;
                                 FailureMessage(ex.Message);
-                                IsActive = false;
+                               
                             }
                             finally
                             {
                                 if (_host?.State == CommunicationState.Closed)
                                 {
+                                    IsStartActive = true;
                                     SuccessMessage("Connection closed");
-                                    IsActive = false;
+
+                                }
+                                else
+                                {
+                                    IsStopActive = true;
                                 }
                             }
                     }));

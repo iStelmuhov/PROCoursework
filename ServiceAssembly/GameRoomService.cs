@@ -7,6 +7,7 @@ using System.ServiceModel.Dispatcher;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Ink;
 using Timer = System.Timers.Timer;
 
 namespace ServiceAssembly
@@ -83,11 +84,8 @@ namespace ServiceAssembly
                 //try
                 //{
                 IGameCallback callback = _clients[key];
-                callback.RefreshClients(ClientList);
-                callback.RefreshLines(_lines);
+                callback.RefreshClients(ClientList);               
                 callback.UserJoin(client);
-
-
                 //}
                 //        catch
                 //{
@@ -179,10 +177,14 @@ namespace ServiceAssembly
 
             lock (_gameSync)
             {
+                if (_lines.Contains(line))
+                return;
+
                 _lines.Add(line);
                 foreach (IGameCallback callback in _clients.Values)
                 {
-                   callback.ReceiveLine(line);                
+                    if(callback!=CurrentCallback)
+                        callback.ReceiveLine(line);                
                 }
             }
         }
@@ -208,7 +210,7 @@ namespace ServiceAssembly
                 foreach (IGameCallback callback in _clients.Values)
                 {
                     callback.Receive(new Message(Admin, $"New game started! \n {Game.Settings.DrawingClient.Name} is drawer!"));
-                    callback.PerfomStartGame();
+                    callback.PerfomStartGame(Game.Settings.DrawingClient);
                     callback.RefreshLines(_lines);
                 }
             }
@@ -311,7 +313,7 @@ namespace ServiceAssembly
         {
             if (Game.IsActive)
             {
-                CurrentCallback.PerfomStartGame();
+                CurrentCallback.PerfomStartGame(Game.Settings.DrawingClient);
                 CurrentCallback.ReciveWordInfo(Game.Settings.Word.Length);
                 foreach (var letterPosition in Game.Settings.Shownletters)
                 {
@@ -327,13 +329,9 @@ namespace ServiceAssembly
         private void CheckAndStarNewGame(bool isConnect = false)
         {
             if (ClientList.Count < 2) return;
+            if(Game.IsActive) return;
 
-            if (Game == null)
-            {
-                Game = new CrocodileGame(this);
-            }
-
-            if (Game.IsActive) return;
+            Game = new CrocodileGame(this);
 
             Random rand = new Random();
             if (_canSend)

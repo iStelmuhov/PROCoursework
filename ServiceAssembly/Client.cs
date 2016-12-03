@@ -48,7 +48,7 @@ namespace ServiceAssembly
 
         protected bool Equals(Client other)
         {
-            return string.Equals(_name, other._name) && Equals(Pic, other.Pic);
+            return string.Equals(_name, other._name);
         }
 
         public override bool Equals(object obj)

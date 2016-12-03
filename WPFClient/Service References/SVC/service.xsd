@@ -178,7 +178,9 @@
   </xs:element>
   <xs:element name="PerfomStartGame">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/ServiceAssembly" minOccurs="0" name="mainPlayer" nillable="true" type="q20:Client" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PerfomEndGame">

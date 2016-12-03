@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System.Windows.Ink" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.Windows.Ink" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/System.Windows.Media" />
+  <xs:complexType name="DrawingAttributes">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/System.Windows.Media" minOccurs="0" name="Color" type="q1:Color" />
+      <xs:element minOccurs="0" name="FitToCurve" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Height" type="xs:double" />
+      <xs:element minOccurs="0" name="IgnorePressure" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsHighlighter" type="xs:boolean" />
+      <xs:element minOccurs="0" name="StylusTip" type="tns:StylusTip" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System.Windows.Media" minOccurs="0" name="StylusTipTransform" type="q2:Matrix" />
+      <xs:element minOccurs="0" name="Width" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DrawingAttributes" nillable="true" type="tns:DrawingAttributes" />
+  <xs:simpleType name="StylusTip">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Rectangle" />
+      <xs:enumeration value="Ellipse" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="StylusTip" nillable="true" type="tns:StylusTip" />
+</xs:schema>

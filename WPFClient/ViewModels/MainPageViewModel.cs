@@ -6,12 +6,15 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Ink;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using WPFClient.Behavior;
 using WPFClient.Models;
 using WPFClient.SVC;
 using WPFClient.Views;
@@ -103,135 +106,102 @@ namespace WPFClient.ViewModels
 
         #region Drawing
 
-        private Point CurrentPoint { get; set; }
 
-        private ObservableCollection<SVC.Line> _linesCollection = new ObservableCollection<SVC.Line>();
-        public ObservableCollection<SVC.Line> LinesCollection
+        private bool _isDrawer = true;
+        public bool IsDrawer
         {
             get
             {
-                return _linesCollection;
+                return _isDrawer;
             }
 
             set
             {
-                if (_linesCollection == value)
+                if (_isDrawer == value)
                 {
                     return;
                 }
 
-                _linesCollection = value;
-                RaisePropertyChanged(nameof(LinesCollection));
+                _isDrawer = value;
+                RaisePropertyChanged(nameof(IsDrawer));
             }
         }
 
-        private SVC.LineSettings _lineSettings = new LineSettings() { Color = "#FF000000", Thickness = 2 };
-        public LineSettings LineSettings
+        private StrokeCollection _strokesCollection = new StrokeCollection();
+        public StrokeCollection Strokes
         {
             get
             {
-                return _lineSettings;
+                return _strokesCollection;
             }
 
             set
             {
-                if (_lineSettings == value)
+                if (_strokesCollection == value)
                 {
                     return;
                 }
 
-                _lineSettings = value;
-                RaisePropertyChanged(nameof(LineSettings));
+                _strokesCollection = value;
+                RaisePropertyChanged(nameof(Strokes));
             }
         }
+        private void Strokes_StrokesChanged(object sender, StrokeCollectionChangedEventArgs e)
+        {
+            foreach (var stroke in e.Added)
+            {
+                ViewModelLocator.Proxy.SendLineAsync(new Line() { Attributes = DrawAttributes, Points = stroke.StylusPoints.ToList(), Sender = LocalClient });
+            }
+            RaisePropertyChanged(nameof(Strokes));
+        }
 
-        private bool _isDrawing = false;
+        public bool SendBlock = false;
 
-        private RelayCommand<MouseArgs> _drawmMouseDownCommand;
-        public RelayCommand<MouseArgs> DrawMouseDown
+        private DrawingAttributes _drawAttributes = new DrawingAttributes() {Color=Color.FromRgb(0,0,0),FitToCurve = true,Width = 4,Height = 4}; 
+        public DrawingAttributes DrawAttributes
         {
             get
             {
-                return _drawmMouseDownCommand
-                    ?? (_drawmMouseDownCommand = new RelayCommand<MouseArgs>(
-                    (key) =>
-                    {
-                        if (key.ButtonState == MouseButtonState.Pressed)
-                        {
-                            CurrentPoint = key.Point;
-                            _isDrawing = true;
-                        }
-                    }));
+                return _drawAttributes;
             }
-        }
 
-        private RelayCommand<MouseArgs> _drawMouseMoveCommand;
-        public RelayCommand<MouseArgs> DrawMouseMove
-        {
-            get
+            set
             {
-                return _drawMouseMoveCommand
-                    ?? (_drawMouseMoveCommand = new RelayCommand<MouseArgs>(
-                    (key) =>
-                    {
-                        if (key.ButtonState == MouseButtonState.Pressed && _isDrawing)
-                        {
-                            Line line = new Line
-                            {
-                                Sender = LocalClient,
-                                Settings = LineSettings.Clone(),
-                                X1 = CurrentPoint.X,
-                                Y1 = CurrentPoint.Y,
-                                X2 = key.Point.X,
-                                Y2 = key.Point.Y
-                            };
+                if (_drawAttributes == value)
+                {
+                    return;
+                }
 
-                            CurrentPoint = key.Point;
-
-                            if (ViewModelLocator.Proxy == null) return;
-
-                            if (ViewModelLocator.Proxy.State == CommunicationState.Faulted)
-                                HandleProxy();
-                            else
-                            {
-                                ViewModelLocator.Proxy.SendLineAsync(line);
-                            }
-                        }
-                    }));
+                _drawAttributes = value;
+                RaisePropertyChanged(nameof(DrawAttributes));
             }
         }
 
-        private RelayCommand<MouseButtonEventArgs> _drawMouseUpCommand;
-        public RelayCommand<MouseButtonEventArgs> DrawMouseUp
+        public double LineThickness
         {
-            get
+            get { return _drawAttributes.Width; }
+            set
             {
-                return _drawMouseUpCommand
-                    ?? (_drawMouseUpCommand = new RelayCommand<MouseButtonEventArgs>(
-                    (key) =>
-                    {
-                        if (key.ButtonState == MouseButtonState.Released)
-                        {
-                            _isDrawing = false;
-                        }
-                    }));
+                if(Math.Abs(_drawAttributes.Width - value) < 0.1)
+                    return;
+                _drawAttributes.Width = value;
+                _drawAttributes.Height = value;
             }
         }
 
-        private RelayCommand _clearLinesCommand;
+        private RelayCommand _clearCommand;
         public RelayCommand ClearLines
         {
             get
             {
-                return  _clearLinesCommand
-                    ?? ( _clearLinesCommand = new RelayCommand(
+                return _clearCommand
+                    ?? (_clearCommand = new RelayCommand(
                     () =>
                     {
-                        ViewModelLocator.Proxy.ClearLines(LocalClient);
+                        ViewModelLocator.Proxy.ClearLinesAsync(LocalClient);
                     }));
             }
-        }
-
+        }  
         #endregion
 
         #region Flyot
@@ -297,6 +267,8 @@ namespace WPFClient.ViewModels
                         });
 
                         ViewModelLocator.Proxy.GetStartInformation(LocalClient);
+
+                        Strokes.StrokesChanged += Strokes_StrokesChanged; ;
                     }));
             }
         }
@@ -453,7 +425,7 @@ namespace WPFClient.ViewModels
                         Messages.Clear();
                         Clients.Clear();
                         TextField = string.Empty;
-                        LinesCollection.Clear();
+                        Strokes.Clear();
                         Letters.Clear();
                         await HideVisibleDialogs(Application.Current.MainWindow as MetroWindow);
                         
@@ -501,12 +473,20 @@ namespace WPFClient.ViewModels
 
         public void ReceiveLine(Line line)
         {
-            LinesCollection.Add(line);
+            Strokes.StrokesChanged -= Strokes_StrokesChanged;
+            Strokes.Add(new Stroke(new StylusPointCollection(line.Points),line.Attributes));
+            Strokes.StrokesChanged += Strokes_StrokesChanged;
         }
 
         public void RefreshLines(List<Line> line)
         {
-            LinesCollection=new ObservableCollection<Line>(line);
+            Strokes.StrokesChanged -= Strokes_StrokesChanged;
+            Strokes.Clear();
+            foreach (var l in line)
+            {
+                Strokes.Add(new Stroke(new StylusPointCollection(l.Points), l.Attributes));
+            }
+            Strokes.StrokesChanged += Strokes_StrokesChanged;
         }
 
         public void UserJoin(Client client)
@@ -592,9 +572,9 @@ namespace WPFClient.ViewModels
             DialogCoordinator.Instance.ShowMetroDialogAsync(this, circularProgressBarDialog);           
         }
 
-        public void PerfomStartGame()
+        public void PerfomStartGame(Client mainPlayer)
         {
-            //throw new NotImplementedException();
+            IsDrawer = LocalClient.Name == mainPlayer.Name;
         }
 
 
@@ -602,6 +582,7 @@ namespace WPFClient.ViewModels
         {
             Letters.Clear();
             RefreshClients(Clients.ToList());
+            IsDrawer = true;
         }
 
 
@@ -745,7 +726,7 @@ namespace WPFClient.ViewModels
         {
             throw new NotImplementedException();
         }
-        public IAsyncResult BeginPerfomStartGame(AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginPerfomStartGame(Client mainPlayer,AsyncCallback callback, object asyncState)
         {
             throw new NotImplementedException();
         }

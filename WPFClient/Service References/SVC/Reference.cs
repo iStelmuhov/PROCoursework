@@ -254,22 +254,16 @@ namespace WPFClient.SVC {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Windows.Ink.DrawingAttributes AttributesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsRecivedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<System.Windows.Input.StylusPoint> PointsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private WPFClient.SVC.Client SenderField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private WPFClient.SVC.LineSettings SettingsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double X1Field;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double X2Field;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double Y1Field;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double Y2Field;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -278,6 +272,45 @@ namespace WPFClient.SVC {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Windows.Ink.DrawingAttributes Attributes {
+            get {
+                return this.AttributesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AttributesField, value) != true)) {
+                    this.AttributesField = value;
+                    this.RaisePropertyChanged("Attributes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsRecived {
+            get {
+                return this.IsRecivedField;
+            }
+            set {
+                if ((this.IsRecivedField.Equals(value) != true)) {
+                    this.IsRecivedField = value;
+                    this.RaisePropertyChanged("IsRecived");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<System.Windows.Input.StylusPoint> Points {
+            get {
+                return this.PointsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PointsField, value) != true)) {
+                    this.PointsField = value;
+                    this.RaisePropertyChanged("Points");
+                }
             }
         }
         
@@ -294,71 +327,6 @@ namespace WPFClient.SVC {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public WPFClient.SVC.LineSettings Settings {
-            get {
-                return this.SettingsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.SettingsField, value) != true)) {
-                    this.SettingsField = value;
-                    this.RaisePropertyChanged("Settings");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public double X1 {
-            get {
-                return this.X1Field;
-            }
-            set {
-                if ((this.X1Field.Equals(value) != true)) {
-                    this.X1Field = value;
-                    this.RaisePropertyChanged("X1");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public double X2 {
-            get {
-                return this.X2Field;
-            }
-            set {
-                if ((this.X2Field.Equals(value) != true)) {
-                    this.X2Field = value;
-                    this.RaisePropertyChanged("X2");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public double Y1 {
-            get {
-                return this.Y1Field;
-            }
-            set {
-                if ((this.Y1Field.Equals(value) != true)) {
-                    this.Y1Field = value;
-                    this.RaisePropertyChanged("Y1");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public double Y2 {
-            get {
-                return this.Y2Field;
-            }
-            set {
-                if ((this.Y2Field.Equals(value) != true)) {
-                    this.Y2Field = value;
-                    this.RaisePropertyChanged("Y2");
-                }
-            }
-        }
-        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -369,65 +337,22 @@ namespace WPFClient.SVC {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LineSettings", Namespace="http://schemas.datacontract.org/2004/07/ServiceAssembly")]
-    [System.SerializableAttribute()]
-    public partial class LineSettings : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    [System.FlagsAttribute()]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MatrixTypes", Namespace="http://schemas.datacontract.org/2004/07/MS.Internal")]
+    public enum MatrixTypes : int {
         
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TRANSFORM_IS_IDENTITY = 0,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ColorField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TRANSFORM_IS_TRANSLATION = 1,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ThicknessField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TRANSFORM_IS_SCALING = 2,
         
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Color {
-            get {
-                return this.ColorField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ColorField, value) != true)) {
-                    this.ColorField = value;
-                    this.RaisePropertyChanged("Color");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Thickness {
-            get {
-                return this.ThicknessField;
-            }
-            set {
-                if ((this.ThicknessField.Equals(value) != true)) {
-                    this.ThicknessField = value;
-                    this.RaisePropertyChanged("Thickness");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TRANSFORM_IS_UNKNOWN = 4,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -631,10 +556,10 @@ namespace WPFClient.SVC {
         void EndWordChoose(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGame/PerfomStartGame")]
-        void PerfomStartGame();
+        void PerfomStartGame(WPFClient.SVC.Client mainPlayer);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IGame/PerfomStartGame")]
-        System.IAsyncResult BeginPerfomStartGame(System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginPerfomStartGame(WPFClient.SVC.Client mainPlayer, System.AsyncCallback callback, object asyncState);
         
         void EndPerfomStartGame(System.IAsyncResult result);
         
